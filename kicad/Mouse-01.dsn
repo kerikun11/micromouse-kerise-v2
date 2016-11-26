@@ -106,7 +106,7 @@
             131500 -134866  131574 -134819  131643 -134766  131707 -134707
             131766 -134643  131819 -134574  131866 -134500  131906 -134423
             131940 -134342  131966 -134259  131985 -134174  131996 -134087))
-    (via "Via[0-1]_400:300_um" "Via[0-1]_600:400_um" "Via[0-1]_1000:600_um")
+    (via "Via[0-1]_400:300_um" "Via[0-1]_500:400_um" "Via[0-1]_800:500_um")
     (rule
       (width 200)
       (clearance 200.1)
@@ -908,14 +908,14 @@
       (shape (circle B.Cu 400))
       (attach off)
     )
-    (padstack "Via[0-1]_600:400_um"
-      (shape (circle F.Cu 600))
-      (shape (circle B.Cu 600))
+    (padstack "Via[0-1]_500:400_um"
+      (shape (circle F.Cu 500))
+      (shape (circle B.Cu 500))
       (attach off)
     )
-    (padstack "Via[0-1]_1000:600_um"
-      (shape (circle F.Cu 1000))
-      (shape (circle B.Cu 1000))
+    (padstack "Via[0-1]_800:500_um"
+      (shape (circle F.Cu 800))
+      (shape (circle B.Cu 800))
       (attach off)
     )
   )
@@ -1013,9 +1013,6 @@
     )
     (net "EN-R-A"
       (pins U1-58 P2-6)
-    )
-    (net "Net-(P3-Pad1)"
-      (pins P3-1 Q1-2 R3-1)
     )
     (net SWCLK
       (pins P5-1 U1-49)
@@ -1134,14 +1131,15 @@
     (net "Net-(R5-Pad1)"
       (pins R5-1 U4-11)
     )
-    (class kicad_default "" +1.65VA +3.3VADC /IR_LED_FL_SR/IR_LED_R_to_FET
-      /IR_LED_FL_SR/IR_LED_to_IR_LED /IR_LED_FL_SR/IR_LED_to_R /IR_LED_SL_FR/IR_LED_R_to_FET
-      /IR_LED_SL_FR/IR_LED_to_IR_LED /IR_LED_SL_FR/IR_LED_to_R "BAT-VOL" BUTTON
-      "EN-L-A" "EN-L-B" "EN-R-A" "EN-R-B" LED_1 LED_2 LED_3 LED_4 "MT-IN-L-1"
-      "MT-IN-L-2" "MT-IN-R-1" "MT-IN-R-2" "Net-(C21-Pad2)" "Net-(C22-Pad2)"
-      "Net-(C23-Pad2)" "Net-(C24-Pad2)" "Net-(C25-Pad2)" "Net-(C26-Pad2)"
-      "Net-(C27-Pad2)" "Net-(C28-Pad2)" "Net-(C31-Pad1)" "Net-(C8-Pad1)" "Net-(C9-Pad1)"
-      "Net-(D1-Pad2)" "Net-(D10-Pad2)" "Net-(D11-Pad2)" "Net-(D12-Pad2)" "Net-(D13-Pad2)"
+    (net /Power/BAT_to_FET
+      (pins P3-1 Q1-2 R3-1)
+    )
+    (class kicad_default "" +1.65VA +3.3VADC "BAT-VOL" BUTTON "EN-L-A" "EN-L-B"
+      "EN-R-A" "EN-R-B" LED_1 LED_2 LED_3 LED_4 "MT-IN-L-1" "MT-IN-L-2" "MT-IN-R-1"
+      "MT-IN-R-2" "Net-(C21-Pad2)" "Net-(C22-Pad2)" "Net-(C23-Pad2)" "Net-(C24-Pad2)"
+      "Net-(C25-Pad2)" "Net-(C26-Pad2)" "Net-(C27-Pad2)" "Net-(C28-Pad2)"
+      "Net-(C31-Pad1)" "Net-(C8-Pad1)" "Net-(C9-Pad1)" "Net-(D1-Pad2)" "Net-(D10-Pad2)"
+      "Net-(D11-Pad2)" "Net-(D12-Pad2)" "Net-(D13-Pad2)" "Net-(P3-Pad1)" "Net-(P3-Pad2)"
       "Net-(Q1-Pad1)" "Net-(Q4-Pad3)" "Net-(R5-Pad1)" "Net-(SW1-Pad1)" "Net-(SW1-Pad3)"
       "Net-(SW2-Pad1)" "Net-(SW3-Pad1)" "Net-(SW3-Pad3)" "Net-(U1-Pad2)" "Net-(U1-Pad28)"
       "Net-(U1-Pad3)" "Net-(U1-Pad33)" "Net-(U1-Pad34)" "Net-(U1-Pad4)" "Net-(U1-Pad40)"
@@ -1166,16 +1164,16 @@
         (use_via Via[0-1]_400:300_um)
       )
       (rule
-        (width 290)
+        (width 200)
         (clearance 200.1)
       )
     )
     (class 5V +5V
       (circuit
-        (use_via Via[0-1]_600:400_um)
+        (use_via Via[0-1]_500:400_um)
       )
       (rule
-        (width 440)
+        (width 400)
         (clearance 200.1)
       )
     )
@@ -1184,43 +1182,45 @@
         (use_via Via[0-1]_400:300_um)
       )
       (rule
-        (width 190)
+        (width 200)
         (clearance 200.1)
       )
     )
     (class GND GND
       (circuit
-        (use_via Via[0-1]_600:400_um)
+        (use_via Via[0-1]_400:300_um)
       )
       (rule
-        (width 440)
+        (width 200)
         (clearance 200.1)
       )
     )
-    (class IR_LED
+    (class IR_LED /IR_LED_FL_SR/IR_LED_R_to_FET /IR_LED_FL_SR/IR_LED_to_IR_LED
+      /IR_LED_FL_SR/IR_LED_to_R /IR_LED_SL_FR/IR_LED_R_to_FET /IR_LED_SL_FR/IR_LED_to_IR_LED
+      /IR_LED_SL_FR/IR_LED_to_R
       (circuit
-        (use_via Via[0-1]_600:400_um)
+        (use_via Via[0-1]_500:400_um)
       )
       (rule
-        (width 440)
+        (width 400)
         (clearance 200.1)
       )
     )
     (class Motor /Motor_L/MT_OUT_1 /Motor_L/MT_OUT_2 /Motor_R/MT_OUT_1 /Motor_R/MT_OUT_2
       (circuit
-        (use_via Via[0-1]_1000:600_um)
+        (use_via Via[0-1]_800:500_um)
       )
       (rule
-        (width 800)
+        (width 600)
         (clearance 200.1)
       )
     )
-    (class VBAT +BATT "Net-(P3-Pad1)" "Net-(P3-Pad2)"
+    (class VBAT +BATT /Power/BAT_to_FET
       (circuit
-        (use_via Via[0-1]_1000:600_um)
+        (use_via Via[0-1]_800:500_um)
       )
       (rule
-        (width 800)
+        (width 600)
         (clearance 200.1)
       )
     )
