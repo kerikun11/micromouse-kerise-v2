@@ -106,7 +106,7 @@
             131500 -134866  131574 -134819  131643 -134766  131707 -134707
             131766 -134643  131819 -134574  131866 -134500  131906 -134423
             131940 -134342  131966 -134259  131985 -134174  131996 -134087))
-    (via "Via[0-1]_400:300_um" "Via[0-1]_500:400_um" "Via[0-1]_800:500_um")
+    (via "Via[0-1]_400:300_um" "Via[0-1]_500:400_um" "Via[0-1]_1000:800_um")
     (rule
       (width 200)
       (clearance 200.1)
@@ -119,8 +119,8 @@
       (place P5 156250 -107500 front 0 (PN SWD))
     )
     (component Capacitors_SMD:C_0603
-      (place C8 152500 -116000 front 0 (PN 2.2u))
-      (place C9 150000 -107500 front 0 (PN 2.2u))
+      (place C8 135000 -118500 front 180 (PN 2.2u))
+      (place C9 152500 -117000 front 0 (PN 2.2u))
       (place C17 144250 -129500 front 270 (PN 10u))
       (place C18 137250 -129000 front 180 (PN 10u))
     )
@@ -142,7 +142,7 @@
       (place Q1 136000 -151000 front 270 (PN IRLML6402))
     )
     (component "Housings_QFP:LQFP-64_10x10mm_Pitch0.5mm"
-      (place U1 143000 -113000 front 45 (PN STM32F405RGTx))
+      (place U1 143000 -113000 front 315 (PN STM32F405RGTx))
     )
     (component "TO_SOT_Packages_SMD:SOT-23-5"
       (place U5 141250 -129500 front 0 (PN REF1933))
@@ -157,12 +157,12 @@
       (place P6 129250 -107500 front 0 (PN UART))
     )
     (component Capacitors_SMD:C_0402
-      (place C1 148250 -120000 front 0 (PN 0.1u))
-      (place C2 152500 -113500 front 0 (PN 0.1u))
-      (place C3 143000 -104500 front 0 (PN 0.1u))
-      (place C4 134500 -110000 front 0 (PN 0.1u))
-      (place C5 138000 -120000 front 180 (PN 0.1u))
-      (place C6 134500 -116250 front 180 (PN 0.1u))
+      (place C1 134500 -116000 front 180 (PN 0.1u))
+      (place C2 138000 -120000 front 180 (PN 0.1u))
+      (place C3 152500 -115000 front 0 (PN 0.1u))
+      (place C4 143000 -104500 front 180 (PN 0.1u))
+      (place C5 135500 -108500 front 0 (PN 0.1u))
+      (place C6 138000 -106500 front 180 (PN 0.1u))
       (place C7 167500 -149500 front 315 (PN 0.1u))
       (place C10 157000 -122000 front 0 (PN 0.1u))
       (place C11 129000 -146000 front 180 (PN 0.1u))
@@ -189,10 +189,10 @@
       (place P4 139000 -156000 front 0 (PN Battery_B))
     )
     (component Resistors_SMD:R_0402
-      (place R1 152500 -120000 front 180 (PN 20k))
+      (place R1 149500 -119500 front 90 (PN 20k))
       (place R2 143000 -100000 front 0 (PN 10k))
       (place R3 133000 -151000 front 90 (PN 10k))
-      (place R4 152500 -118000 front 0 (PN 10k))
+      (place R4 152000 -119500 front 90 (PN 10k))
       (place R5 143500 -152500 front 180 (PN 133))
       (place R7 164500 -122000 front 0 (PN 10k))
       (place R8 147750 -138750 front 0 (PN 220k))
@@ -913,9 +913,9 @@
       (shape (circle B.Cu 500))
       (attach off)
     )
-    (padstack "Via[0-1]_800:500_um"
-      (shape (circle F.Cu 800))
-      (shape (circle B.Cu 800))
+    (padstack "Via[0-1]_1000:800_um"
+      (shape (circle F.Cu 1000))
+      (shape (circle B.Cu 1000))
       (attach off)
     )
   )
@@ -1089,9 +1089,6 @@
     (net "Net-(D13-Pad2)"
       (pins D13-2 R21-2)
     )
-    (net "Net-(P3-Pad2)"
-      (pins P3-2 P4-1)
-    )
     (net "Net-(C28-Pad2)"
       (pins C28-2 R15-1 D7-2)
     )
@@ -1134,6 +1131,9 @@
     (net /Power/BAT_to_FET
       (pins P3-1 Q1-2 R3-1)
     )
+    (net /Power/BAT_to_BAT
+      (pins P3-2 P4-1)
+    )
     (class kicad_default "" +1.65VA +3.3VADC "BAT-VOL" BUTTON "EN-L-A" "EN-L-B"
       "EN-R-A" "EN-R-B" LED_1 LED_2 LED_3 LED_4 "MT-IN-L-1" "MT-IN-L-2" "MT-IN-R-1"
       "MT-IN-R-2" "Net-(C21-Pad2)" "Net-(C22-Pad2)" "Net-(C23-Pad2)" "Net-(C24-Pad2)"
@@ -1164,7 +1164,7 @@
         (use_via Via[0-1]_400:300_um)
       )
       (rule
-        (width 200)
+        (width 300)
         (clearance 200.1)
       )
     )
@@ -1188,10 +1188,10 @@
     )
     (class GND GND
       (circuit
-        (use_via Via[0-1]_400:300_um)
+        (use_via Via[0-1]_500:400_um)
       )
       (rule
-        (width 200)
+        (width 400)
         (clearance 200.1)
       )
     )
@@ -1208,23 +1208,30 @@
     )
     (class Motor /Motor_L/MT_OUT_1 /Motor_L/MT_OUT_2 /Motor_R/MT_OUT_1 /Motor_R/MT_OUT_2
       (circuit
-        (use_via Via[0-1]_800:500_um)
+        (use_via Via[0-1]_1000:800_um)
       )
       (rule
-        (width 600)
+        (width 800)
         (clearance 200.1)
       )
     )
-    (class VBAT +BATT /Power/BAT_to_FET
+    (class VBAT +BATT /Power/BAT_to_BAT /Power/BAT_to_FET
       (circuit
-        (use_via Via[0-1]_800:500_um)
+        (use_via Via[0-1]_1000:800_um)
       )
       (rule
-        (width 600)
+        (width 800)
         (clearance 200.1)
       )
     )
   )
   (wiring
+    (wire (path F.Cu 800  154000 -123500  154000 -130000)(net GND)(type protect))
+    (wire (path F.Cu 800  148750 -149750  140250 -149750)(net GND)(type protect))
+    (wire (path F.Cu 800  156500 -142000  148750 -149750)(net GND)(type protect))
+    (wire (path F.Cu 800  156500 -132500  156500 -142000)(net GND)(type protect))
+    (wire (path F.Cu 800  154000 -130000  156500 -132500)(net GND)(type protect))
+    (wire (path F.Cu 800  132000 -143500  132000 -146500  133000 -147500  138000 -147500
+            140250 -149750  140250 -156000)(net GND)(type protect))
   )
 )

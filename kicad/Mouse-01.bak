@@ -329,17 +329,6 @@ F 3 "" H 4300 2600 50  0000 C CNN
 	1    4300 2600
 	1    0    0    -1  
 $EndComp
-$Comp
-L C_Small C6
-U 1 1 57CDB4B2
-P 4500 2300
-F 0 "C6" H 4510 2370 50  0000 L CNN
-F 1 "0.1u" H 4510 2220 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 4500 2300 50  0001 C CNN
-F 3 "" H 4500 2300 50  0000 C CNN
-	1    4500 2300
-	0    1    1    0   
-$EndComp
 $Sheet
 S 1400 4200 600  200 
 U 57CEFE78
@@ -545,6 +534,35 @@ NoConn ~ 10300 5700
 NoConn ~ 10300 5900
 NoConn ~ 10300 6100
 NoConn ~ 10300 6200
+$Comp
+L Tactile_SW_4P SW1
+U 1 1 57DDDB01
+P 3900 3300
+F 0 "SW1" H 3900 3550 50  0000 C CNN
+F 1 "RESET" H 3900 2950 50  0000 C CNN
+F 2 "mouse:SW_PUSH" V 3850 3250 60  0001 C CNN
+F 3 "" V 3850 3250 60  0000 C CNN
+	1    3900 3300
+	1    0    0    -1  
+$EndComp
+NoConn ~ 3500 3600
+NoConn ~ 3500 3100
+Text Notes 700  800  0    100  ~ 0
+Main
+NoConn ~ 10300 3400
+NoConn ~ 10300 1700
+NoConn ~ 10300 1800
+$Comp
+L C_Small C1
+U 1 1 57CDA771
+P 4500 1100
+F 0 "C1" H 4510 1170 50  0000 L CNN
+F 1 "0.1u" H 4510 1020 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4500 1100 50  0001 C CNN
+F 3 "" H 4500 1100 50  0000 C CNN
+	1    4500 1100
+	0    1    1    0   
+$EndComp
 Wire Wire Line
 	4800 1000 4800 2300
 Wire Wire Line
@@ -555,8 +573,6 @@ Wire Wire Line
 Connection ~ 4800 1700
 Wire Wire Line
 	4600 2000 4900 2000
-Wire Wire Line
-	4600 2300 4900 2300
 Connection ~ 4800 2000
 Wire Wire Line
 	4800 5500 4800 6100
@@ -612,10 +628,6 @@ Connection ~ 4300 1500
 Wire Wire Line
 	4300 1100 4400 1100
 Connection ~ 4300 1300
-Connection ~ 4800 2300
-Wire Wire Line
-	4300 2300 4400 2300
-Connection ~ 4300 2300
 Wire Wire Line
 	1300 4800 1400 4800
 Wire Wire Line
@@ -749,37 +761,25 @@ Wire Wire Line
 	10400 900  10300 900 
 Wire Wire Line
 	10300 800  10400 800 
-$Comp
-L Tactile_SW_4P SW1
-U 1 1 57DDDB01
-P 3900 3300
-F 0 "SW1" H 3900 3550 50  0000 C CNN
-F 1 "RESET" H 3900 2950 50  0000 C CNN
-F 2 "mouse:SW_PUSH" V 3850 3250 60  0001 C CNN
-F 3 "" V 3850 3250 60  0000 C CNN
-	1    3900 3300
-	1    0    0    -1  
-$EndComp
-NoConn ~ 3500 3600
-NoConn ~ 3500 3100
-Text Notes 700  800  0    100  ~ 0
-Main
 Wire Wire Line
 	4400 1700 4300 1700
 Wire Wire Line
 	4300 2000 4400 2000
-NoConn ~ 10300 3400
-NoConn ~ 10300 1700
-NoConn ~ 10300 1800
+Connection ~ 4800 2300
+Connection ~ 4300 2300
+Wire Wire Line
+	4300 2300 4400 2300
+Wire Wire Line
+	4600 2300 4900 2300
 $Comp
-L C_Small C1
-U 1 1 57CDA771
-P 4500 1100
-F 0 "C1" H 4510 1170 50  0000 L CNN
-F 1 "0.1u" H 4510 1020 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 4500 1100 50  0001 C CNN
-F 3 "" H 4500 1100 50  0000 C CNN
-	1    4500 1100
+L C_Small C6
+U 1 1 57CDB4B2
+P 4500 2300
+F 0 "C6" H 4510 2370 50  0000 L CNN
+F 1 "0.1u" H 4510 2220 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4500 2300 50  0001 C CNN
+F 3 "" H 4500 2300 50  0000 C CNN
+	1    4500 2300
 	0    1    1    0   
 $EndComp
 $EndSCHEMATC

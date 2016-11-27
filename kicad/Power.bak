@@ -857,4 +857,6 @@ F 3 "" H 9100 3350 50  0000 C CNN
 	1    9100 3350
 	1    0    0    -1  
 $EndComp
+Text Label 3800 2900 0    60   ~ 0
+BAT_to_FET
 $EndSCHEMATC
