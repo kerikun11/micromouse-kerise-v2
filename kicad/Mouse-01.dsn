@@ -156,8 +156,8 @@
       (place C38 167250 -139000 front 0 (PN 4.7u))
     )
     (component Capacitors_SMD:C_0805
-      (place C15 147500 -149500 front 90 (PN 22u))
-      (place C12 150000 -149500 front 270 (PN 22u))
+      (place C15 147500 -150000 front 90 (PN 22u))
+      (place C12 150000 -150000 front 270 (PN 22u))
     )
     (component LEDs:LED_0603
       (place D10 136000 -98500 front 270 (PN LED))
@@ -194,7 +194,7 @@
     )
     (component Capacitors_SMD:C_0402
       (place C1 134500 -116000 front 180 (PN 0.1u))
-      (place C2 138250 -120000 front 180 (PN 0.1u))
+      (place C2 138250 -119500 front 180 (PN 0.1u))
       (place C3 151750 -115000 front 0 (PN 0.1u))
       (place C4 146750 -104750 front 315 (PN 0.1u))
       (place C5 136000 -107500 front 45 (PN 0.1u))
@@ -202,19 +202,19 @@
       (place C7 165000 -150000 front 270 (PN 0.1u))
       (place C10 154500 -128750 front 180 (PN 0.1u))
       (place C11 131500 -139250 front 0 (PN 0.1u))
-      (place C13 152000 -149500 front 270 (PN 0.1u))
-      (place C14 145500 -149500 front 90 (PN 0.1u))
+      (place C13 152000 -150000 front 270 (PN 0.1u))
+      (place C14 145500 -150000 front 90 (PN 0.1u))
       (place C16 139750 -130000 front 90 (PN 0.1u))
       (place C19 134750 -129000 front 0 (PN 0.1u))
       (place C20 136000 -138750 front 0 (PN 0.1u))
-      (place C21 147750 -140500 front 0 (PN 22p))
-      (place C22 147750 -142000 front 180 (PN 0.01u))
-      (place C23 151750 -140500 front 180 (PN 22p))
-      (place C24 151750 -142000 front 0 (PN 0.01u))
-      (place C25 150750 -127500 front 180 (PN 22p))
-      (place C26 149750 -126000 front 0 (PN 0.01u))
-      (place C27 147250 -127500 front 0 (PN 22p))
-      (place C28 146250 -126000 front 180 (PN 0.01u))
+      (place C21 147750 -140000 front 0 (PN 22p))
+      (place C22 147750 -141500 front 180 (PN 0.01u))
+      (place C23 151750 -140000 front 180 (PN 22p))
+      (place C24 151750 -141500 front 0 (PN 0.01u))
+      (place C25 150750 -127750 front 180 (PN 22p))
+      (place C26 149750 -126500 front 0 (PN 0.01u))
+      (place C27 147250 -127750 front 0 (PN 22p))
+      (place C28 146250 -126500 front 180 (PN 0.01u))
       (place C29 140750 -137750 front 270 (PN 0.01u))
       (place C30 145250 -137750 front 90 (PN 0.1u))
       (place C31 143000 -140000 front 0 (PN 0.1u))
@@ -235,13 +235,13 @@
       (place R4 161000 -122000 front 0 (PN 10k))
       (place R5 144000 -151500 front 90 (PN 133))
       (place R7 165000 -120500 front 270 (PN 10k))
-      (place R8 147750 -139000 front 0 (PN 220k))
+      (place R8 147750 -138750 front 0 (PN 220k))
       (place R9 140500 -101500 front 270 (PN 100k))
-      (place R10 151750 -139000 front 180 (PN 220k))
+      (place R10 151750 -138750 front 180 (PN 220k))
       (place R11 122500 -119000 front 180 (PN 100k))
-      (place R12 151750 -129000 front 180 (PN 220k))
+      (place R12 151750 -129250 front 180 (PN 220k))
       (place R13 163000 -120500 front 270 (PN 100k))
-      (place R14 147750 -129000 front 0 (PN 220k))
+      (place R14 147750 -129250 front 0 (PN 220k))
       (place R15 145500 -101500 front 90 (PN 100k))
       (place R17 121250 -120750 front 90 (PN 10k))
       (place R18 137500 -98500 front 90 (PN 1k))
@@ -284,9 +284,6 @@
     )
     (component "Housings_SSOP:TSSOP-14_4.4x5mm_Pitch0.65mm"
       (place U7 150000 -134000 front 90 (PN AD8604))
-    )
-    (component KERI:KERI_22mm
-      (place G*** 143000 -130000 back 0 (PN LOGO))
     )
     (component Resistors_SMD:R_0603
       (place R23 119250 -131500 front 270 (PN 1k))
@@ -807,8 +804,6 @@
       (pin Rect[T]Pad_1450x450_um 13 2950 1300)
       (pin Rect[T]Pad_1450x450_um 14 2950 1950)
     )
-    (image KERI:KERI_22mm
-    )
     (image Resistors_SMD:R_0603
       (outline (path signal 50  -1300 800  1300 800))
       (outline (path signal 50  -1300 -800  1300 -800))
@@ -1248,18 +1243,6 @@
     (net /Power/BAT_to_BAT
       (pins P3-2 P4-1)
     )
-    (net "Net-(C33-Pad1)"
-      (pins C33-1 D14-2 D15-2 U9-4 U10-4 P7-1)
-    )
-    (net "Net-(C33-Pad2)"
-      (pins C33-2 C34-2 C35-2 P8-2 P9-2 R25-2 R26-2 U9-2 U10-2 P7-4 P7-5 P7-5@1)
-    )
-    (net "Net-(C34-Pad1)"
-      (pins C34-1 P8-1 U9-3)
-    )
-    (net "Net-(C35-Pad1)"
-      (pins C35-1 P9-1 U10-3)
-    )
     (net "Net-(D14-Pad1)"
       (pins D14-1 R23-1)
     )
@@ -1277,18 +1260,6 @@
     )
     (net "Net-(R26-Pad1)"
       (pins R26-1 U10-5)
-    )
-    (net "Net-(C36-Pad1)"
-      (pins C36-1 D16-2 D17-2 P10-1 U11-4 U12-4)
-    )
-    (net "Net-(C36-Pad2)"
-      (pins C36-2 C37-2 C38-2 P10-4 P10-5 P10-5@1 P11-2 P12-2 R29-2 R30-2 U11-2 U12-2)
-    )
-    (net "Net-(C37-Pad1)"
-      (pins C37-1 P11-1 U11-3)
-    )
-    (net "Net-(C38-Pad1)"
-      (pins C38-1 P12-1 U12-3)
     )
     (net "Net-(D16-Pad1)"
       (pins D16-1 R27-1)
@@ -1311,29 +1282,51 @@
     (net /AXIS_SENSOR/AXIS_CAP
       (pins C31-1 U8-10)
     )
+    (net "/Charger A/VDD"
+      (pins C33-1 D14-2 D15-2 U9-4 U10-4 P7-1)
+    )
+    (net "/Charger A/VSS"
+      (pins C33-2 C34-2 C35-2 P8-2 P9-2 R25-2 R26-2 U9-2 U10-2 P7-4 P7-5 P7-5@1)
+    )
+    (net "/Charger A/OUT_1"
+      (pins C34-1 P8-1 U9-3)
+    )
+    (net "/Charger A/OUT_2"
+      (pins C35-1 P9-1 U10-3)
+    )
+    (net "/Charger B/VDD"
+      (pins C36-1 D16-2 D17-2 P10-1 U11-4 U12-4)
+    )
+    (net "/Charger B/VSS"
+      (pins C36-2 C37-2 C38-2 P10-4 P10-5 P10-5@1 P11-2 P12-2 R29-2 R30-2 U11-2 U12-2)
+    )
+    (net "/Charger B/OUT_1"
+      (pins C37-1 P11-1 U11-3)
+    )
+    (net "/Charger B/OUT_2"
+      (pins C38-1 P12-1 U12-3)
+    )
     (class kicad_default "" +1.65VA +3.3VADC "BAT-VOL" BUTTON "EN-L-A" "EN-L-B"
       "EN-R-A" "EN-R-B" LED_1 LED_2 LED_3 LED_4 "MT-IN-L-1" "MT-IN-L-2" "MT-IN-R-1"
       "MT-IN-R-2" "Net-(C21-Pad2)" "Net-(C22-Pad2)" "Net-(C23-Pad2)" "Net-(C24-Pad2)"
       "Net-(C25-Pad2)" "Net-(C26-Pad2)" "Net-(C27-Pad2)" "Net-(C28-Pad2)"
-      "Net-(C31-Pad1)" "Net-(C33-Pad1)" "Net-(C33-Pad2)" "Net-(C34-Pad1)"
-      "Net-(C35-Pad1)" "Net-(C36-Pad1)" "Net-(C36-Pad2)" "Net-(C37-Pad1)"
-      "Net-(C38-Pad1)" "Net-(C8-Pad1)" "Net-(C9-Pad1)" "Net-(D1-Pad2)" "Net-(D10-Pad2)"
-      "Net-(D11-Pad2)" "Net-(D12-Pad2)" "Net-(D13-Pad2)" "Net-(D14-Pad1)"
-      "Net-(D15-Pad1)" "Net-(D16-Pad1)" "Net-(D17-Pad1)" "Net-(P10-Pad2)"
-      "Net-(P10-Pad3)" "Net-(P7-Pad2)" "Net-(P7-Pad3)" "Net-(Q1-Pad1)" "Net-(Q4-Pad3)"
-      "Net-(R23-Pad2)" "Net-(R24-Pad2)" "Net-(R25-Pad1)" "Net-(R26-Pad1)"
-      "Net-(R27-Pad2)" "Net-(R28-Pad2)" "Net-(R29-Pad1)" "Net-(R30-Pad1)"
-      "Net-(R5-Pad1)" "Net-(SW1-Pad1)" "Net-(SW1-Pad3)" "Net-(SW2-Pad1)" "Net-(SW3-Pad1)"
-      "Net-(SW3-Pad3)" "Net-(U1-Pad2)" "Net-(U1-Pad28)" "Net-(U1-Pad3)" "Net-(U1-Pad33)"
-      "Net-(U1-Pad34)" "Net-(U1-Pad4)" "Net-(U1-Pad40)" "Net-(U1-Pad41)" "Net-(U1-Pad42)"
-      "Net-(U1-Pad43)" "Net-(U1-Pad44)" "Net-(U1-Pad45)" "Net-(U1-Pad5)" "Net-(U1-Pad50)"
-      "Net-(U1-Pad51)" "Net-(U1-Pad52)" "Net-(U1-Pad53)" "Net-(U1-Pad54)"
-      "Net-(U1-Pad6)" "Net-(U1-Pad62)" "Net-(U4-Pad10)" "Net-(U4-Pad2)" "Net-(U6-Pad4)"
-      "Net-(U8-Pad1)" "Net-(U8-Pad14)" "Net-(U8-Pad15)" "Net-(U8-Pad16)" "Net-(U8-Pad17)"
-      "Net-(U8-Pad19)" "Net-(U8-Pad2)" "Net-(U8-Pad21)" "Net-(U8-Pad3)" "Net-(U8-Pad4)"
-      "Net-(U8-Pad5)" "Net-(U8-Pad6)" "Net-(U8-Pad7)" "PR-LED-FL_SR" "PR-LED-SL-FR"
-      "PR-RCV-FL" "PR-RCV-FR" "PR-RCV-SL" "PR-RCV-SR" RESET SPEAKER SWCLK
-      SWDIO SWO "UART-RX" "UART-TX"
+      "Net-(C8-Pad1)" "Net-(C9-Pad1)" "Net-(D1-Pad2)" "Net-(D10-Pad2)" "Net-(D11-Pad2)"
+      "Net-(D12-Pad2)" "Net-(D13-Pad2)" "Net-(D14-Pad1)" "Net-(D15-Pad1)"
+      "Net-(D16-Pad1)" "Net-(D17-Pad1)" "Net-(P10-Pad2)" "Net-(P10-Pad3)"
+      "Net-(P7-Pad2)" "Net-(P7-Pad3)" "Net-(Q1-Pad1)" "Net-(Q4-Pad3)" "Net-(R23-Pad2)"
+      "Net-(R24-Pad2)" "Net-(R25-Pad1)" "Net-(R26-Pad1)" "Net-(R27-Pad2)"
+      "Net-(R28-Pad2)" "Net-(R29-Pad1)" "Net-(R30-Pad1)" "Net-(R5-Pad1)" "Net-(SW1-Pad1)"
+      "Net-(SW1-Pad3)" "Net-(SW2-Pad1)" "Net-(SW3-Pad1)" "Net-(SW3-Pad3)"
+      "Net-(U1-Pad2)" "Net-(U1-Pad28)" "Net-(U1-Pad3)" "Net-(U1-Pad33)" "Net-(U1-Pad34)"
+      "Net-(U1-Pad4)" "Net-(U1-Pad40)" "Net-(U1-Pad41)" "Net-(U1-Pad42)" "Net-(U1-Pad43)"
+      "Net-(U1-Pad44)" "Net-(U1-Pad45)" "Net-(U1-Pad5)" "Net-(U1-Pad50)" "Net-(U1-Pad51)"
+      "Net-(U1-Pad52)" "Net-(U1-Pad53)" "Net-(U1-Pad54)" "Net-(U1-Pad6)" "Net-(U1-Pad62)"
+      "Net-(U4-Pad10)" "Net-(U4-Pad2)" "Net-(U6-Pad4)" "Net-(U8-Pad1)" "Net-(U8-Pad14)"
+      "Net-(U8-Pad15)" "Net-(U8-Pad16)" "Net-(U8-Pad17)" "Net-(U8-Pad19)"
+      "Net-(U8-Pad2)" "Net-(U8-Pad21)" "Net-(U8-Pad3)" "Net-(U8-Pad4)" "Net-(U8-Pad5)"
+      "Net-(U8-Pad6)" "Net-(U8-Pad7)" "PR-LED-FL_SR" "PR-LED-SL-FR" "PR-RCV-FL"
+      "PR-RCV-FR" "PR-RCV-SL" "PR-RCV-SR" RESET SPEAKER SWCLK SWDIO SWO "UART-RX"
+      "UART-TX"
       (circuit
         (use_via Via[0-1]_360:300_um)
       )
@@ -1367,6 +1360,16 @@
       )
       (rule
         (width 199.9)
+        (clearance 200.1)
+      )
+    )
+    (class Charge "/Charger A/OUT_1" "/Charger A/OUT_2" "/Charger A/VDD" "/Charger A/VSS"
+      "/Charger B/OUT_1" "/Charger B/OUT_2" "/Charger B/VDD" "/Charger B/VSS"
+      (circuit
+        (use_via Via[0-1]_500:300_um)
+      )
+      (rule
+        (width 399.9)
         (clearance 200.1)
       )
     )
