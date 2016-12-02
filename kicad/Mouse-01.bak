@@ -88,7 +88,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 13
+Sheet 1 14
 Title ""
 Date ""
 Rev ""
@@ -782,4 +782,10 @@ F 3 "" H 4500 2300 50  0000 C CNN
 	1    4500 2300
 	0    1    1    0   
 $EndComp
+$Sheet
+S 4700 6600 800  800 
+U 58401A83
+F0 "Charger" 60
+F1 "Charger.sch" 60
+$EndSheet
 $EndSCHEMATC

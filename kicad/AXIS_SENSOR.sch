@@ -88,7 +88,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 11 13
+Sheet 11 14
 Title ""
 Date ""
 Rev ""
@@ -276,4 +276,6 @@ Wire Wire Line
 	6100 2900 6000 2900
 Text Notes 4200 2400 0    100  ~ 0
 AXIS Sensor
+Text Label 7200 3600 0    60   ~ 0
+AXIS_CAP
 $EndSCHEMATC
