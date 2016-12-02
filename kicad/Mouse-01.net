@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source C:/Users/kerikun11/GoogleDrive/Github/KERISEv2/kicad/Mouse-01.sch)
-    (date "2016/12/02 11:38:06")
+    (date "2016/12/02 21:34:25")
     (tool "Eeschema 4.0.1-stable")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -1284,16 +1284,16 @@
         (pin (num 4) (name GND) (type power_in))
         (pin (num 5) (name shield) (type passive)))))
   (libraries
-    (library (logical Mouse-01)
-      (uri C:\Users\kerikun11\GoogleDrive\Github\KERISEv2\kicad\Mouse-01.lib))
-    (library (logical conn)
-      (uri "C:\\Program Files\\KiCad\\share\\kicad\\library\\conn.lib"))
+    (library (logical Mouse-01-cache)
+      (uri C:\Users\kerikun11\GoogleDrive\Github\KERISEv2\kicad\Mouse-01-cache.lib))
     (library (logical device)
       (uri "C:\\Program Files\\KiCad\\share\\kicad\\library\\device.lib"))
+    (library (logical conn)
+      (uri "C:\\Program Files\\KiCad\\share\\kicad\\library\\conn.lib"))
+    (library (logical Mouse-01)
+      (uri Mouse-01.lib))
     (library (logical linear)
-      (uri "C:\\Program Files\\KiCad\\share\\kicad\\library\\linear.lib"))
-    (library (logical Mouse-01-cache)
-      (uri C:\Users\kerikun11\GoogleDrive\Github\KERISEv2\kicad\Mouse-01-cache.lib)))
+      (uri "C:\\Program Files\\KiCad\\share\\kicad\\library\\linear.lib")))
   (nets
     (net (code 1) (name EN-L-B)
       (node (ref U1) (pin 57))
