@@ -1,5 +1,4 @@
 EESchema Schematic File Version 2
-LIBS:Mouse-01
 LIBS:74xgxx
 LIBS:74xx
 LIBS:ac-dc
@@ -83,7 +82,8 @@ LIBS:video
 LIBS:Xicor
 LIBS:xilinx
 LIBS:Zilog
-LIBS:Mouse-01-cache
+LIBS:KERISEv2
+LIBS:KERISEv2-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
