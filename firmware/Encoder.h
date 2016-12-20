@@ -33,7 +33,7 @@ public:
 		update();
 		return overflow_count * 65536 + getRawCount();
 	}
-	double position() {
+	float position() {
 		return value() * WHEEL_DIAMETER_MM * M_PI * WHEEL_GEER_RATIO / ENCODER_PULSES;
 	}
 private:
@@ -152,7 +152,7 @@ public:
 				return 0;
 		}
 	}
-	double position(uint8_t ch = 2) {
+	float position(uint8_t ch = 2) {
 		switch (ch) {
 			case 0:
 				return -encoderL.position();

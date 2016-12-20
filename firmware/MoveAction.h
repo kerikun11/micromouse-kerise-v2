@@ -16,7 +16,7 @@
 #define WALL_AVOID_ENABLED			false
 
 #define LOOK_AHEAD_UNIT				4
-#define TRAJECTORY_PROP_GAIN		40
+#define TRAJECTORY_PROP_GAIN		20
 #define TRAJECTORY_INTEGRAL_GAIN	0
 
 class Trajectory {
@@ -991,7 +991,7 @@ private:
 		timer.start();
 		while (1) {
 			Thread::signal_wait(0x01);
-			if (fabs(sc->actual_velocity().rot) > speed) break;
+			if (fabs(sc->actual.rot) > speed) break;
 			if (target_angle > 0) {
 				sc->set_target(0, timer.read() * accel);
 			} else {
@@ -1000,7 +1000,7 @@ private:
 		}
 		while (1) {
 			Thread::signal_wait(0x01);
-			if (fabs(sc->actual_velocity().rot) < 0.2) break;
+			if (fabs(sc->actual.rot) < 0.2) break;
 			float extra = target_angle - getRelativePosition().theta;
 			float target_speed = sqrt(2 * accel * fabs(extra));
 			target_speed = (target_speed > speed) ? speed : target_speed;
@@ -1023,13 +1023,13 @@ private:
 		bool isAccel = true;
 		while (1) {
 			if (getRelativePosition().x > distance * 0.98) break;
-			if (v2 < 1.0f && sc->actual_velocity().trans < 1.0f) break;
+			if (v2 < 1.0f && sc->actual.trans < 1.0f) break;
 			Thread::signal_wait(0x01);
 			float extra = distance - getRelativePosition().x;
 			float velocity = sqrt(2 * decel * fabs(extra) + v2 * v2);
 			if (extra < 0) velocity = -velocity;
-			if (velocity < sc->actual_velocity().trans) isAccel = false;
-			if (isAccel && sc->actual_velocity().trans < v1) {
+			if (velocity < sc->actual.trans) isAccel = false;
+			if (isAccel && sc->actual.trans < v1) {
 				velocity = v0 + timer.read() * accel;
 			}
 			if (velocity > v1) velocity = v1;

@@ -38,9 +38,16 @@ SpeedController *sc;
 MoveAction *ma;
 MazeSolver *ms;
 
+bool output = false;
+
 void debug_info() {
 	while (1) {
-		Thread::wait(100);
+		Thread::wait(6);
+
+		const int i = 1;
+		if (output) printf("%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i],
+				sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]),
+				sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]));
 
 //		printf("%05u\t%05u\t%05u\t%05u\t", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
 //		printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().flont[0] ? "X" : ".",
@@ -52,11 +59,11 @@ void debug_info() {
 
 //		printf("trans: %07.3f\n", sc->actual().trans);
 
-		printf("Gyro: %9.3f\tAngle: %09.3f\n", mpu->gyroZ(), mpu->angleZ());
+//		printf("Gyro: %9.3f\tAngle: %09.3f\n", mpu->gyroZ(), mpu->angleZ());
 
 //		printf("L: %ld\tR: %ld\n", enc->left(), enc->right());
 
-		printf("Acc Y: %lf\n", mpu->accelY());
+//		printf("Acc Y: %lf\n", mpu->accelY());
 
 //		for (int i = 0; i < 2; i++) {
 //			printf("P:%09.2f\tI:%09.2f\tD:%09.2f\t", sc->actual_p.wheel[i], sc->actual_i.wheel[i],
@@ -382,13 +389,29 @@ int main() {
 	/* for debug */
 	Thread debugInfoThread(PRIORITY_DEBUG_INFO, STACK_SIZE_DEBUG_INFO);
 	debugInfoThread.start(debug_info);
-	printf("0x%08X: debug info\n", (unsigned int) debugInfoThread.gettid());
+//	printf("0x%08X: debug info\n", (unsigned int) debugInfoThread.gettid());
 	Thread serialCtrlThread(PRIORITY_SERIAL_CTRL, STACK_SIZE_SERIAL_CTRL);
 	serialCtrlThread.start(serial_ctrl);
-	printf("0x%08X: Serial Ctrl\n", (unsigned int) serialCtrlThread.gettid());
+//	printf("0x%08X: Serial Ctrl\n", (unsigned int) serialCtrlThread.gettid());
 	Thread emergencyThread(PRIORITY_EMERGENCY_STOP, STACK_SIZE_EMERGENCY);
 	emergencyThread.start(emergencyTask);
-	printf("0x%08X: Emergency\n", (unsigned int) emergencyThread.gettid());
+//	printf("0x%08X: Emergency\n", (unsigned int) emergencyThread.gettid());
+
+	sc->enable();
+	while (1) {
+		while (!btn->pressed) {
+			Thread::wait(10);
+		}
+		btn->flags = 0;
+		bz->play(Buzzer::CONFIRM);
+		Thread::wait(1000);
+		output = true;
+		sc->set_target(600, 0);
+		Thread::wait(400);
+		sc->set_target(0, 0);
+		Thread::wait(400);
+		output = false;
+	}
 
 	while (true) {
 		Thread::wait(10);

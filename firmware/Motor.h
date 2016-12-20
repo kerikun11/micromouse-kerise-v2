@@ -126,8 +126,8 @@ public:
 		}
 	}
 	void drive(int16_t valueL, int16_t valueR) {
-		right(valueR);
 		left(valueL);
+		right(valueR);
 	}
 	void free() {
 		sConfig.Pulse = 0;

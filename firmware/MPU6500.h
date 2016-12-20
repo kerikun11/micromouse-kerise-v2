@@ -31,19 +31,19 @@ public:
 		_accelY = 0;
 		_gyroZ = 0;
 		_angleZ = 0;
-		_offset_gyroZ = 0.6f;
+		_offset_gyroZ = 0.0f;
 	}
-	double accelY() {
+	float accelY() {
 		return _accelY;
 	}
-	double gyroZ() {
-		return _gyroZ;
+	float gyroZ() {
+		return _gyroZ * M_PI / 180.0f;
 	}
-	double angleZ() {
-		return _angleZ;
+	float angleZ() {
+		return _angleZ * M_PI / 180.0f;
 	}
 	void calibration() {
-		double sum = 0;
+		float sum = 0;
 		const int ave_count = 500;
 		for (int i = 0; i < ave_count; i++) {
 			sum += gyroZ();
@@ -57,10 +57,10 @@ private:
 	DigitalOut cs;
 	Thread updateThread;
 	Ticker updateTicker;
-	volatile double _accelY;
-	volatile double _gyroZ;
-	volatile double _angleZ;
-	double _offset_gyroZ;
+	volatile float _accelY;
+	volatile float _gyroZ;
+	volatile float _angleZ;
+	float _offset_gyroZ;
 
 	void updateIsr() {
 		updateThread.signal_set(0x01);
@@ -74,8 +74,8 @@ private:
 		}
 	}
 	void setup() {
-		this->writeReg(0x6b, 0x80);	// reset
-		Thread::wait(100);
+//		this->writeReg(0x6b, 0x80);	// reset
+//		Thread::wait(100);
 		this->writeReg(0x19, 0x07);	// samplerate
 		this->writeReg(0x1b, 0x18); // +-2000dps
 //		this->writeReg(0x1b, 0x10); // +-1000dps
