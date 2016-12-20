@@ -16,7 +16,7 @@
 #define WALL_AVOID_ENABLED			false
 
 #define LOOK_AHEAD_UNIT				4
-#define TRAJECTORY_PROP_GAIN		20
+#define TRAJECTORY_PROP_GAIN		40
 #define TRAJECTORY_INTEGRAL_GAIN	0
 
 class Trajectory {
@@ -1013,8 +1013,8 @@ private:
 		updateOrigin(Position(0, 0, target_angle));
 	}
 	void straight_x(const float distance, const float v0, const float v1, const float v2) {
-		const float accel = 8000;
-		const float decel = 4000;
+		const float accel = 6000;
+		const float decel = 3000;
 		Trajectory st;
 		timer.reset();
 		timer.start();

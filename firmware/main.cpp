@@ -42,12 +42,12 @@ bool output = false;
 
 void debug_info() {
 	while (1) {
-		Thread::wait(6);
+		Thread::wait(100);
 
-		const int i = 1;
-		if (output) printf("%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i],
-				sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]),
-				sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]));
+//		const int i = 1;
+//		if (output) printf("%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i],
+//				sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]),
+//				sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]));
 
 //		printf("%05u\t%05u\t%05u\t%05u\t", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
 //		printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().flont[0] ? "X" : ".",
@@ -389,29 +389,13 @@ int main() {
 	/* for debug */
 	Thread debugInfoThread(PRIORITY_DEBUG_INFO, STACK_SIZE_DEBUG_INFO);
 	debugInfoThread.start(debug_info);
-//	printf("0x%08X: debug info\n", (unsigned int) debugInfoThread.gettid());
+	printf("0x%08X: debug info\n", (unsigned int) debugInfoThread.gettid());
 	Thread serialCtrlThread(PRIORITY_SERIAL_CTRL, STACK_SIZE_SERIAL_CTRL);
 	serialCtrlThread.start(serial_ctrl);
-//	printf("0x%08X: Serial Ctrl\n", (unsigned int) serialCtrlThread.gettid());
+	printf("0x%08X: Serial Ctrl\n", (unsigned int) serialCtrlThread.gettid());
 	Thread emergencyThread(PRIORITY_EMERGENCY_STOP, STACK_SIZE_EMERGENCY);
 	emergencyThread.start(emergencyTask);
-//	printf("0x%08X: Emergency\n", (unsigned int) emergencyThread.gettid());
-
-	sc->enable();
-	while (1) {
-		while (!btn->pressed) {
-			Thread::wait(10);
-		}
-		btn->flags = 0;
-		bz->play(Buzzer::CONFIRM);
-		Thread::wait(1000);
-		output = true;
-		sc->set_target(600, 0);
-		Thread::wait(400);
-		sc->set_target(0, 0);
-		Thread::wait(400);
-		output = false;
-	}
+	printf("0x%08X: Emergency\n", (unsigned int) emergencyThread.gettid());
 
 	while (true) {
 		Thread::wait(10);

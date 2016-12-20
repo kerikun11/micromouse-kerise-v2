@@ -118,7 +118,7 @@ public:
 			mt(mt), enc(enc), mpu(mpu),
 					ctrlThread(PRIORITY_SPEED_CONTROLLER, STACK_SIZE_SPEED_CONTROLLER) {
 		ctrlThread.start(this, &SpeedController::ctrlTask);
-//		printf("0x%08X: Speed Controller\n", (unsigned int) ctrlThread.gettid());
+		printf("0x%08X: Speed Controller\n", (unsigned int) ctrlThread.gettid());
 		for (int i = 0; i < 2; i++) {
 			target.wheel[i] = 0;
 			for (int j = 0; j < 3; j++) {
@@ -161,7 +161,7 @@ public:
 	WheelParameter actual;
 	WheelParameter integral;
 	WheelParameter differential;
-	const float Kp = 3.6f;
+	const float Kp = 3.0f;
 	const float Ki = 10.0f;
 	const float Kd = 0.0f;
 private:
