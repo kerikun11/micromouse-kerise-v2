@@ -191,7 +191,7 @@ private:
 						* 1000000/ SPEED_CONTROLLER_PERIOD_US;
 			}
 			actual.wheel2pole();
-			actual.rot = mpu->gyroZ();
+			actual.rot = mpu->gyro.z;
 			actual.pole2wheel();
 			for (int i = 0; i < 2; i++) {
 				integral.wheel[i] += (actual.wheel[i] - target.wheel[i])

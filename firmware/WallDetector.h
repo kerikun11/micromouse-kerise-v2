@@ -53,8 +53,8 @@ public:
 			_wall_ref.side[i] = _wall_distance.side[i] / 3;
 		}
 		for (int i = 0; i < 2; i++) {
-			_wall_distance.flont[i] = (_wall_distance.side[0] + _wall_distance.side[1])
-					/ 2* WALL_DETECTOR_FLONT_RATIO;
+			_wall_distance.flont[i] = WALL_DETECTOR_FLONT_RATIO
+					* (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
 			_wall_ref.flont[i] = _wall_distance.flont[i] / 6;
 		}
 		printf("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],

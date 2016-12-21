@@ -1084,7 +1084,7 @@ private:
 						break;
 					case START_INIT:
 						straight_x(90, velocity, velocity, 0);
-						if (mpu->angleZ() > 0) {
+						if (mpu->angle.z > 0) {
 							wall_attach();
 							turn(-M_PI / 2, omega);
 							wall_attach();
@@ -1118,7 +1118,7 @@ private:
 						break;
 					case RETURN:
 						straight_x(90, velocity, velocity, 0);
-						if (mpu->angleZ() > 0) {
+						if (mpu->angle.z > 0) {
 							wall_attach();
 							turn(-M_PI / 2, omega);
 							wall_attach();

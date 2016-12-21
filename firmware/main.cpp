@@ -42,7 +42,10 @@ bool output = false;
 
 void debug_info() {
 	while (1) {
-		Thread::wait(100);
+		Thread::wait(20);
+
+//		printf("%.2f,%.2f\n", mpu->gyro.z, mpu->angle.z);
+//		printf("%.4f,%.4f\n", mpu->accel.y, mpu->velocity.y);
 
 //		const int i = 1;
 //		if (output) printf("%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i],
@@ -312,6 +315,7 @@ void serial_ctrl() {
 				ms->start();
 				break;
 			case 'p':
+				bz->play(Buzzer::SELECT);
 				printf("%05u\t%05u\t%05u\t%05u\n", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
 				printf("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0],
 						wd->wall_difference().flont[0], wd->wall_difference().flont[1],
@@ -331,7 +335,7 @@ void serial_ctrl() {
 void emergencyTask() {
 	while (1) {
 		Thread::wait(1);
-		if (mpu->accelY() < -10) {	// -15
+		if (mpu->accel.y < -5) {	// -15
 			mt->emergency_stop();
 			ms->terminate();
 			bz->play(Buzzer::EMERGENCY);
