@@ -25,7 +25,7 @@ public:
 			updateThread(PRIORITY_ENCODER_UPDATE, STACK_SIZE_ENCODER) {
 		EncoderInit(TIMx, 0xffff, TIM_ENCODERMODE_TI12);
 		updateThread.start(this, &Encoder::updateTask);
-		printf("0x%08X: Encoder\n", (unsigned int) updateThread.gettid());
+		DBG("0x%08X: Encoder\n", (unsigned int) updateThread.gettid());
 		prev_count = 0;
 		overflow_count = 0;
 	}
@@ -118,13 +118,13 @@ private:
 		encoder.IC2Selection = TIM_ICSELECTION_DIRECTTI;
 
 		if (HAL_TIM_Encoder_Init(&timer, &encoder) != HAL_OK) {
-			printf("Couldn't Init Encoder\r\n");
+			DBG("Couldn't Init Encoder\r\n");
 			while (1) {
 			}
 		}
 
 		if (HAL_TIM_Encoder_Start(&timer, TIM_CHANNEL_1) != HAL_OK) {
-			printf("Couldn't Start Encoder\r\n");
+			DBG("Couldn't Start Encoder\r\n");
 			while (1) {
 			}
 		}

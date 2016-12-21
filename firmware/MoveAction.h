@@ -880,7 +880,7 @@ public:
 		rfl->enable();
 		sc->enable();
 		thread.start(this, &MoveAction::task);
-		printf("0x%08X: Move Action\n", (unsigned int) thread.gettid());
+		DBG("0x%08X: Move Action\n", (unsigned int) thread.gettid());
 	}
 	void disable() {
 		thread.terminate();
@@ -911,13 +911,13 @@ public:
 		return _actions;
 	}
 	void printPosition(const char* name) {
-//		printf("%s\t", name);
-//		printf("Ori:(%06.1f, %06.1f, %06.3f)\t", origin.x, origin.y, origin.theta);
-//		printf("Abs:(%06.1f, %06.1f, %06.3f)\t", sc->getPosition().x, sc->getPosition().y,
+//		DBG("%s\t", name);
+//		DBG("Ori:(%06.1f, %06.1f, %06.3f)\t", origin.x, origin.y, origin.theta);
+//		DBG("Abs:(%06.1f, %06.1f, %06.3f)\t", sc->getPosition().x, sc->getPosition().y,
 //				sc->getPosition().theta);
-//		printf("Rel:(%06.1f, %06.1f, %06.3f)\t", getRelativePosition().x, getRelativePosition().y,
+//		DBG("Rel:(%06.1f, %06.1f, %06.3f)\t", getRelativePosition().x, getRelativePosition().y,
 //				getRelativePosition().theta);
-//		printf("\n");
+//		DBG("\n");
 	}
 	Position getRelativePosition() {
 		return (sc->getPosition() - origin).rotate(-origin.theta);
@@ -980,7 +980,7 @@ private:
 			}
 			sc->set_target(0, 0);
 			fixPosition(Position(getRelativePosition().x, 0, 0));
-			printf("Attach:\t(%06.1f, %06.1f, %06.3f)\n", getRelativePosition().x,
+			DBG("Attach:\t(%06.1f, %06.1f, %06.3f)\n", getRelativePosition().x,
 					getRelativePosition().y, getRelativePosition().theta);
 		}
 #endif
@@ -1037,7 +1037,7 @@ private:
 			integral += dir.theta * TRAJECTORY_INTEGRAL_GAIN * MOVE_ACTION_PERIOD / 1000000;
 			sc->set_target(dir.x, (dir.theta + integral) * TRAJECTORY_PROP_GAIN);
 			if (cnt % 10 == 0) {
-//				printf("%.3f\t%.3f\t%.4f\n", dir.x, dir.y, dir.theta);
+//				DBG("%.3f\t%.3f\t%.4f\n", dir.x, dir.y, dir.theta);
 			}
 			cnt++;
 			wall_avoid();
@@ -1055,7 +1055,7 @@ private:
 			integral += dir.theta * TRAJECTORY_INTEGRAL_GAIN * MOVE_ACTION_PERIOD / 1000000;
 			sc->set_target(dir.x, (dir.theta + integral) * TRAJECTORY_PROP_GAIN);
 			if (cnt % 10 == 0) {
-//				printf("%.3f\t%.3f\t%.4f\n", dir.x, dir.y, dir.theta);
+//				DBG("%.3f\t%.3f\t%.4f\n", dir.x, dir.y, dir.theta);
 			}
 			cnt++;
 		}
@@ -1066,13 +1066,13 @@ private:
 		while (1) {
 			osEvent evt = mail.get();
 			if (evt.status != osEventMail) {
-				printf("Mail Error!\n");
+				DBG("Mail Error!\n");
 				continue;
 			}
 			struct Operation *operation = (struct Operation*) evt.value.p;
 			enum ACTION action = operation->action;
 			int num = operation->num;
-			printf("Action:\t%s\tNumber:\t%d\n", action_string(operation->action), operation->num);
+			DBG("Action:\t%s\tNumber:\t%d\n", action_string(operation->action), operation->num);
 			printPosition("Start");
 			const float velocity = 500;
 			const float omega = 4.0f * M_PI;

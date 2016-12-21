@@ -8,6 +8,8 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#include "mbed.h"
+
 /* Thread Priorities */
 
 #define PRIORITY_REFLECTOR_UPDATE	osPriorityHigh
@@ -70,6 +72,25 @@
 
 #define IR_LED_SL_FR_PIN	PB_14
 #define IR_LED_SR_FL_PIN	PB_15
+
+/* debug output */
+//Debug is disabled by default
+#if 1
+#define DBG(x, ...)  std::printf("[DBG] " x " \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__)
+#define WARN(x, ...) std::printf("[WARN] " x " \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__)
+#define ERR(x, ...)  std::printf("[ERR] " x " \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__)
+#else
+#define DBG(x, ...) //wait_us(10);
+#define WARN(x, ...) //wait_us(10);
+#define ERR(x, ...)
+#endif
+
+//Debug is disabled by default
+#if 0
+#define LOG(x, ...)  printf(x, ##__VA_ARGS__)
+#else
+#define LOG(x, ...) //wait_us(10);
+#endif
 
 /*
  * TIM1		IR LED

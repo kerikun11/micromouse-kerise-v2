@@ -26,7 +26,7 @@ public:
 	}
 	void start() {
 		thread.start(this, &MazeSolver::task);
-		printf("0x%08X: Maze Solver\n", (unsigned int) thread.gettid());
+		DBG("0x%08X: Maze Solver\n", (unsigned int) thread.gettid());
 	}
 	void terminate() {
 		thread.terminate();
@@ -206,18 +206,18 @@ private:
 
 			Direction wallData = getWallData();		//< センサから取得した壁情報を入れる
 			IndexVec robotPos = getRobotPosion();	//< ロボットの座標を取得
-			printf("Position:\t(%d, %d)\tWall:\t%X\n", (int) robotPos.x, (int) robotPos.y,
+			DBG("Position:\t(%d, %d)\tWall:\t%X\n", (int) robotPos.x, (int) robotPos.y,
 					(int) wallData);
 
 			agent.update(robotPos, wallData);		//< 壁情報を更新 次に進むべき方向を計算
-			printf("agent.getState() => %d\n", agent.getState());
+			DBG("agent.getState() => %d\n", agent.getState());
 			if (agent.getState() == Agent::FINISHED) break;	//Agentの状態を確認 FINISHEDになったら計測走行にうつる
 
 			//ゴールにたどり着いた瞬間に一度だけmazeのバックアップをとる
 			//Mazeクラスはoperator=が定義してあるからa = bでコピーできる
 			if (prevState != Agent::SEARCHING_REACHED_GOAL
 					&& agent.getState() == Agent::SEARCHING_REACHED_GOAL) {
-				printf("maze_backup\n");
+				DBG("maze_backup\n");
 				maze_backup = maze;
 				bz->play(Buzzer::CONFIRM);
 			}
@@ -227,7 +227,7 @@ private:
 			prevState = agent.getState();
 
 			Direction nextDir = agent.getNextDirection();	//< Agentの状態が探索中の場合は次に進むべき方向を取得する
-			printf("agent.getNextDirection() => %X\n", (int) nextDir);
+			DBG("agent.getNextDirection() => %X\n", (int) nextDir);
 			if (nextDir == 0) {
 				bz->play(Buzzer::ERROR);
 				ma->set_action(MoveAction::STOP);
@@ -248,12 +248,12 @@ private:
 		maze.printWall();
 		Thread::wait(10);
 
-		printf("agent.calcRunSequence();\n");
+		DBG("agent.calcRunSequence();\n");
 		agent.calcRunSequence(false);
 	}
 	void fast_run() {
 		const OperationList &runSequence = agent.getRunSequence();
-		printf("runSequence.size() => %d\n", runSequence.size());
+		DBG("runSequence.size() => %d\n", runSequence.size());
 		bz->play(Buzzer::CONFIRM);
 
 		dir = NORTH;
@@ -261,7 +261,7 @@ private:
 
 		ma->set_action(MoveAction::FAST_START_STEP);
 		for (size_t i = 0; i < runSequence.size(); i++) {
-			printf("runSequence[%d].n => %d, runSequence[%d].op => %d\n", i, runSequence[i].n, i,
+			DBG("runSequence[%d].n => %d, runSequence[%d].op => %d\n", i, runSequence[i].n, i,
 					runSequence[i].op);
 			const Operation& op = runSequence[i];
 			if (i == 0) {
@@ -306,10 +306,10 @@ private:
 		// end drive
 
 		// back to start
-		printf("Back to Start\n");
+		DBG("Back to Start\n");
 		ma->set_action(MoveAction::RETURN);
 		for (size_t i = 0; i < runSequence.size(); i++) {
-			printf("runSequence[%d].n => %d, runSequence[%d].op => %d\n",
+			DBG("runSequence[%d].n => %d, runSequence[%d].op => %d\n",
 					runSequence.size() - i - 1, runSequence[runSequence.size() - 1 - i].n,
 					runSequence.size() - 1 - i, runSequence[runSequence.size() - 1 - i].op);
 			const Operation& op = runSequence[runSequence.size() - 1 - i];

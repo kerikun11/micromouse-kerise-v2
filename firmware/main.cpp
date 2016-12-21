@@ -7,8 +7,6 @@
 
 #include "mbed.h"
 
-//#define printf(...)	((void)0)
-
 #include "config.h"
 #include "Battery.h"
 #include "Buzzer.h"
@@ -42,38 +40,19 @@ bool output = false;
 
 void debug_info() {
 	while (1) {
-		Thread::wait(20);
+		Thread::wait(6);
 
-//		printf("%.2f,%.2f\n", mpu->gyro.z, mpu->angle.z);
-//		printf("%.4f,%.4f\n", mpu->accel.y, mpu->velocity.y);
+//		const int i = 0;
+//		if (output) LOG("%.0f,%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i] / 10,
+//				sc->actual.wheel[i] / 10, sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]) / 10,
+//				sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]) / 10,
+//				sc->Kp * sc->Kd * (0 - sc->differential.wheel[i]) / 10);
+//		if (output) LOG("%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i]);
 
-//		const int i = 1;
-//		if (output) printf("%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i],
-//				sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]),
-//				sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]));
+//		if (output) LOG("%.0f,%.0f\n", sc->target.trans, sc->actual.trans);
 
-//		printf("%05u\t%05u\t%05u\t%05u\t", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
-//		printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().flont[0] ? "X" : ".",
-//				wd->wall().flont[1] ? "X" : ".", wd->wall().side[1] ? "X" : ".");
-
-//		printf("x: %07.3f\ty: %07.3f\ttheta: %07.3f\ttrans: %07.3f\tomega: %07.3f\n",
-//				sc->position.x, sc->position.y, sc->position.theta / M_PI * 180, sc->actual().trans,
-//				sc->actual().rot);
-
-//		printf("trans: %07.3f\n", sc->actual().trans);
-
-//		printf("Gyro: %9.3f\tAngle: %09.3f\n", mpu->gyroZ(), mpu->angleZ());
-
-//		printf("L: %ld\tR: %ld\n", enc->left(), enc->right());
-
-//		printf("Acc Y: %lf\n", mpu->accelY());
-
-//		for (int i = 0; i < 2; i++) {
-//			printf("P:%09.2f\tI:%09.2f\tD:%09.2f\t", sc->actual_p.wheel[i], sc->actual_i.wheel[i],
-//					sc->actual_d.wheel[i]);
-//		}
-//		printf("L:%09.2f\tR:%09.2f\t", sc->target_p.wheel[0], sc->target_p.wheel[1]);
-//		printf("\n");
+//		LOG("%.3f,%.3f\n", mpu->gyro.z, mpu->angle.z);
+//		LOG("%.0f,%.0f\n", mpu->accel.y, mpu->velocity.y);
 	}
 }
 
@@ -81,8 +60,7 @@ void serial_ctrl() {
 	while (1) {
 		Thread::wait(100);
 		int c = getchar();
-		if (c == EOF) continue;
-		printf("%c\n", (char) c);
+		if (c == EOF) continue;DBG("%c\n", (char ) c);
 		switch (c) {
 			case 'g':
 				bz->play(Buzzer::CONFIRM);
@@ -316,17 +294,15 @@ void serial_ctrl() {
 				break;
 			case 'p':
 				bz->play(Buzzer::SELECT);
-				printf("%05u\t%05u\t%05u\t%05u\n", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
-				printf("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0],
+				DBG("%05u\t%05u\t%05u\t%05u\n", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
+				DBG("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0],
 						wd->wall_difference().flont[0], wd->wall_difference().flont[1],
 						wd->wall_difference().side[1]);
-				printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".",
+				DBG("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".",
 						wd->wall().flont[0] ? "X" : ".", wd->wall().flont[1] ? "X" : ".",
 						wd->wall().side[1] ? "X" : ".");
-				printf("Position:\t(%06.1f, %06.1f, %06.3f)\n", sc->getPosition().x,
+				DBG("Position:\t(%06.1f, %06.1f, %06.3f)\n", sc->getPosition().x,
 						sc->getPosition().y, sc->getPosition().theta);
-//				printf("Gyro: %7.4f\tAngle: %07.4f\n", mpu->gyroZ(), mpu->angleZ());
-//				printf("L: %ld\tR: %ld\n", enc->left(), enc->right());
 				break;
 		}
 	}
@@ -335,7 +311,7 @@ void serial_ctrl() {
 void emergencyTask() {
 	while (1) {
 		Thread::wait(1);
-		if (mpu->accel.y < -5) {	// -15
+		if (mpu->accel.y < -10000) {	// -15
 			mt->emergency_stop();
 			ms->terminate();
 			bz->play(Buzzer::EMERGENCY);
@@ -372,10 +348,10 @@ int main() {
 
 	/* boot */
 	{
-		printf("\nHello World!\n");
+		DBG("\nHello World!\n");
 		if (!bat->check()) {
 			bz->play(Buzzer::LOW_BATTERY);
-			printf("Battery Low!\n");
+			DBG("Battery Low!\n");
 			while (1) {
 				Thread::wait(1000);
 				if (btn->pressed) {
@@ -393,13 +369,47 @@ int main() {
 	/* for debug */
 	Thread debugInfoThread(PRIORITY_DEBUG_INFO, STACK_SIZE_DEBUG_INFO);
 	debugInfoThread.start(debug_info);
-	printf("0x%08X: debug info\n", (unsigned int) debugInfoThread.gettid());
+	DBG("0x%08X: debug info\n", (unsigned int ) debugInfoThread.gettid());
 	Thread serialCtrlThread(PRIORITY_SERIAL_CTRL, STACK_SIZE_SERIAL_CTRL);
 	serialCtrlThread.start(serial_ctrl);
-	printf("0x%08X: Serial Ctrl\n", (unsigned int) serialCtrlThread.gettid());
+	DBG("0x%08X: Serial Ctrl\n", (unsigned int ) serialCtrlThread.gettid());
 	Thread emergencyThread(PRIORITY_EMERGENCY_STOP, STACK_SIZE_EMERGENCY);
 	emergencyThread.start(emergencyTask);
-	printf("0x%08X: Emergency\n", (unsigned int) emergencyThread.gettid());
+	DBG("0x%08X: Emergency\n", (unsigned int ) emergencyThread.gettid());
+
+//	sc->enable();
+//	while (1) {
+//		while (1) {
+//			Thread::wait(10);
+//			if (btn->pressed) {
+//				btn->flags = 0;
+//				bz->play(Buzzer::SELECT);
+//				break;
+//			}
+//		}
+////		Thread::wait(1000);
+////		output = true;
+////		sc->set_target(600, 0);
+////		Thread::wait(300);
+////		sc->set_target(0, 0);
+////		Thread::wait(300);
+////		output = false;
+////		Thread::wait(1000);
+//
+//		Thread::wait(1000);
+//		output = true;
+//		for (int i = 0; i < 100; i++) {
+//			sc->set_target(i * 6, 0);
+//			Thread::wait(1);
+//		}
+//		Thread::wait(200);
+//		for (int i = 0; i < 100; i++) {
+//			sc->set_target(600 - (i + 1) * 6, 0);
+//			Thread::wait(1);
+//		}
+//		Thread::wait(1000);
+//		output = false;
+//	}
 
 	while (true) {
 		Thread::wait(10);
@@ -410,7 +420,7 @@ int main() {
 				bz->play(Buzzer::BOOT);
 				mt->emergency_release();
 				*led = 0;
-				printf("Release Emergency\n");
+				DBG("Released Emergency\n");
 			}
 		}
 		while (ma->actions()) {

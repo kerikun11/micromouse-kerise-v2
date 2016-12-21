@@ -31,7 +31,7 @@ public:
 //		_wall_distance.flont[1] = 560;
 
 		updateThread.start(this, &WallDetector::updateTask);
-		printf("0x%08X: Wall Detector\n", (unsigned int) updateThread.gettid());
+		DBG("0x%08X: Wall Detector\n", (unsigned int) updateThread.gettid());
 		updateTicker.attach_us(this, &WallDetector::updateIsr,
 		WALL_UPDATE_PERIOD_US);
 	}
@@ -57,7 +57,7 @@ public:
 					* (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
 			_wall_ref.flont[i] = _wall_distance.flont[i] / 6;
 		}
-		printf("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],
+		DBG("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],
 				(int) _wall_distance.flont[0], (int) _wall_distance.flont[1],
 				(int) _wall_distance.side[1]);
 	}

@@ -31,7 +31,8 @@ public:
 	Motor() {
 		GPIO_InitTypeDef GPIO_InitStruct;
 		MOTOR_TIMx_CLK_ENABLE();
-		MOTOR_TIMx_CHANNEL_GPIO_PORT();
+		MOTOR_TIMx_CHANNEL_GPIO_PORT()
+		;
 
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -60,7 +61,7 @@ public:
 		TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
 		TimHandle.Init.RepetitionCounter = 0;
 		if (HAL_TIM_PWM_Init(&TimHandle) != HAL_OK) {
-			printf("Couldn't Init PWM\r\n");
+			DBG("Couldn't Init PWM\r\n");
 			while (1) {
 			}
 		}
@@ -77,11 +78,11 @@ public:
 	}
 	void left(int16_t width) {
 		if (!emergency) {
-			if (width > MOTOR_PERIOD_VALUE / 2) {
-				width = MOTOR_PERIOD_VALUE / 2;
+			if (width > MOTOR_PERIOD_VALUE) {
+				width = MOTOR_PERIOD_VALUE;
 			}
-			if (width < -MOTOR_PERIOD_VALUE / 2) {
-				width = -MOTOR_PERIOD_VALUE / 2;
+			if (width < -MOTOR_PERIOD_VALUE) {
+				width = -MOTOR_PERIOD_VALUE;
 			}
 			if (width > 0) {
 				sConfig.Pulse = MOTOR_PERIOD_VALUE - width;
@@ -102,11 +103,11 @@ public:
 	}
 	void right(int16_t width) {
 		if (!emergency) {
-			if (width > MOTOR_PERIOD_VALUE / 2) {
-				width = MOTOR_PERIOD_VALUE / 2;
+			if (width > MOTOR_PERIOD_VALUE) {
+				width = MOTOR_PERIOD_VALUE;
 			}
-			if (width < -MOTOR_PERIOD_VALUE / 2) {
-				width = -MOTOR_PERIOD_VALUE / 2;
+			if (width < -MOTOR_PERIOD_VALUE) {
+				width = -MOTOR_PERIOD_VALUE;
 			}
 			if (width > 0) {
 				sConfig.Pulse = MOTOR_PERIOD_VALUE;

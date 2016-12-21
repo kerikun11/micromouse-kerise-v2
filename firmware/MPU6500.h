@@ -23,7 +23,7 @@ public:
 					updateThread(PRIORITY_MPU6500_UPDATE, STACK_SIZE_MPU6500_UPDATE) {
 		setup();
 		updateThread.start(this, &MPU6500::updateTask);
-		printf("0x%08X: MPU6500\n", (unsigned int) updateThread.gettid());
+		DBG("0x%08X: MPU6500\n", (unsigned int) updateThread.gettid());
 		updateTicker.attach_us(this, &MPU6500::updateIsr,
 		MPU6500_UPDATE_PERIOD_US);
 	}
@@ -177,23 +177,23 @@ private:
 		cs = 1;
 		bond.h = rx[0];
 		bond.l = rx[1];
-		accel.x = bond.i / MPU6500_ACCEL_FACTOR - accel_offset.x;
+		accel.x = bond.i / MPU6500_ACCEL_FACTOR * 1000 - accel_offset.x;
 		bond.h = rx[2];
 		bond.l = rx[3];
-		accel.y = bond.i / MPU6500_ACCEL_FACTOR - accel_offset.y;
+		accel.y = bond.i / MPU6500_ACCEL_FACTOR * 1000 - accel_offset.y;
 		bond.h = rx[4];
 		bond.l = rx[5];
-		accel.z = bond.i / MPU6500_ACCEL_FACTOR - accel_offset.z;
+		accel.z = bond.i / MPU6500_ACCEL_FACTOR * 1000 - accel_offset.z;
 
 		bond.h = rx[8];
 		bond.l = rx[9];
-		gyro.x = bond.i / MPU6500_GYRO_FACTOR - gyro_offset.x;
+		gyro.x = bond.i / MPU6500_GYRO_FACTOR * M_PI / 180 - gyro_offset.x;
 		bond.h = rx[10];
 		bond.l = rx[11];
-		gyro.y = bond.i / MPU6500_GYRO_FACTOR - gyro_offset.y;
+		gyro.y = bond.i / MPU6500_GYRO_FACTOR * M_PI / 180 - gyro_offset.y;
 		bond.h = rx[12];
 		bond.l = rx[13];
-		gyro.z = bond.i / MPU6500_GYRO_FACTOR - gyro_offset.z;
+		gyro.z = bond.i / MPU6500_GYRO_FACTOR * M_PI / 180 - gyro_offset.z;
 	}
 };
 
