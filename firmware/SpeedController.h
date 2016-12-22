@@ -157,7 +157,7 @@ public:
 	WheelParameter actual;
 	WheelParameter integral;
 	WheelParameter differential;
-	const float Kp = 2.8f;
+	const float Kp = 2.4f;
 	const float Ki = 24.0f;
 	const float Kd = 0.01f;
 private:

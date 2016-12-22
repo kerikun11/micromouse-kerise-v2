@@ -311,7 +311,7 @@ void serial_ctrl() {
 void emergencyTask() {
 	while (1) {
 		Thread::wait(1);
-		if (mpu->accel.y < -10000) {	// -15
+		if (mpu->accel.y < -9000) {	// -15
 			mt->emergency_stop();
 			ms->terminate();
 			bz->play(Buzzer::EMERGENCY);

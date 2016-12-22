@@ -880,7 +880,7 @@ public:
 		rfl->enable();
 		sc->enable();
 		thread.start(this, &MoveAction::task);
-		DBG("0x%08X: Move Action\n", (unsigned int) thread.gettid());
+		DBG("0x%08X: Move Action\n", (unsigned int ) thread.gettid());
 	}
 	void disable() {
 		thread.terminate();
@@ -911,13 +911,13 @@ public:
 		return _actions;
 	}
 	void printPosition(const char* name) {
-//		DBG("%s\t", name);
+		DBG("%s\t", name);
 //		DBG("Ori:(%06.1f, %06.1f, %06.3f)\t", origin.x, origin.y, origin.theta);
 //		DBG("Abs:(%06.1f, %06.1f, %06.3f)\t", sc->getPosition().x, sc->getPosition().y,
 //				sc->getPosition().theta);
-//		DBG("Rel:(%06.1f, %06.1f, %06.3f)\t", getRelativePosition().x, getRelativePosition().y,
-//				getRelativePosition().theta);
-//		DBG("\n");
+		DBG("Rel:(%06.1f, %06.1f, %06.3f)\t", getRelativePosition().x, getRelativePosition().y,
+				getRelativePosition().theta);
+		DBG("\n");
 	}
 	Position getRelativePosition() {
 		return (sc->getPosition() - origin).rotate(-origin.theta);
@@ -968,25 +968,17 @@ private:
 			while (1) {
 				float trans = wd->wall_difference().flont[0] + wd->wall_difference().flont[1];
 				float rot = wd->wall_difference().flont[1] - wd->wall_difference().flont[0];
-				const float trans_saturation = 0.4f;
-				const float rot_saturation = 0.4f;
-				if (trans > trans_saturation) trans = trans_saturation;
-				if (trans < -trans_saturation) trans = -trans_saturation;
-				if (rot > rot_saturation) rot = rot_saturation;
-				if (rot < -rot_saturation) rot = -rot_saturation;
-				sc->set_target(trans * 500, rot * 5);
+				sc->set_target(trans * 100, rot * 10);
 				if (fabs(trans) < 0.1f && fabs(rot) < 0.1f) break;
 				Thread::wait(1);
 			}
 			sc->set_target(0, 0);
-			fixPosition(Position(getRelativePosition().x, 0, 0));
-			DBG("Attach:\t(%06.1f, %06.1f, %06.3f)\n", getRelativePosition().x,
-					getRelativePosition().y, getRelativePosition().theta);
+			fixPosition(Position(getRelativePosition().x, 0, 0).rotate(origin.theta));
 		}
 #endif
 	}
 	void turn(float target_angle, float speed) {
-		const float accel = 32 * M_PI;
+		const float accel = 64 * M_PI;
 		timer.reset();
 		timer.start();
 		while (1) {
@@ -1043,6 +1035,7 @@ private:
 			wall_avoid();
 		}
 		sc->set_target(v2, 0);
+		printPosition("Straight");
 		updateOrigin(Position(distance, 0, 0));
 	}
 	template<class C> void trace(C tr, const float velocity) {
@@ -1073,9 +1066,9 @@ private:
 			enum ACTION action = operation->action;
 			int num = operation->num;
 			DBG("Action:\t%s\tNumber:\t%d\n", action_string(operation->action), operation->num);
-			printPosition("Start");
-			const float velocity = 500;
-			const float omega = 4.0f * M_PI;
+//			printPosition("Start");
+			const float velocity = 600;
+			const float omega = 6.0f * M_PI;
 			for (int i = 0; i < num; i++) {
 				switch (action) {
 					case START_STEP:
@@ -1100,7 +1093,7 @@ private:
 							Thread::wait(1);
 						}
 						sc->set_target(-200, 0);
-						Thread::wait(1000);
+						Thread::wait(400);
 						sc->set_target(0, 0);
 						break;
 					case GO_STRAIGHT:
@@ -1227,7 +1220,7 @@ private:
 			}
 			_actions -= operation->num;
 			mail.free(operation);
-			printPosition("End");
+//			printPosition("End");
 		}
 	}
 };

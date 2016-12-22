@@ -76,9 +76,9 @@
 /* debug output */
 //Debug is disabled by default
 #if 1
-#define DBG(x, ...)  std::printf("[DBG] " x " \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__)
-#define WARN(x, ...) std::printf("[WARN] " x " \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__)
-#define ERR(x, ...)  std::printf("[ERR] " x " \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__)
+#define DBG(x, ...)  std::printf(x, ##__VA_ARGS__)
+#define WARN(x, ...) std::printf("[WARN] " x, ##__VA_ARGS__)
+#define ERR(x, ...)  std::printf("[ERR] " x, ##__VA_ARGS__)
 #else
 #define DBG(x, ...) //wait_us(10);
 #define WARN(x, ...) //wait_us(10);
