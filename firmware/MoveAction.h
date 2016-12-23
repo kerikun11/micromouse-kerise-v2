@@ -1134,7 +1134,7 @@ private:
 						straight_x(180 - 24 - 6, 0, velocity, velocity);
 						break;
 					case FAST_GO_STRAIGHT:
-						straight_x(180 * num, velocity, 1800, velocity);
+						straight_x(180 * num, velocity, 2400, velocity);
 						i += num - 1;
 						break;
 					case FAST_GO_DIAGONAL:
