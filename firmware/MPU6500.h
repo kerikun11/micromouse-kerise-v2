@@ -23,7 +23,7 @@ public:
 					updateThread(PRIORITY_MPU6500_UPDATE, STACK_SIZE_MPU6500_UPDATE) {
 		setup();
 		updateThread.start(this, &MPU6500::updateTask);
-		DBG("0x%08X: MPU6500\n", (unsigned int) updateThread.gettid());
+		DBG("0x%08X: MPU6500\n", (unsigned int ) updateThread.gettid());
 		updateTicker.attach_us(this, &MPU6500::updateIsr,
 		MPU6500_UPDATE_PERIOD_US);
 	}
@@ -82,6 +82,8 @@ private:
 	Ticker updateTicker;
 	Parameter accel_offset;
 	Parameter gyro_offset;
+	Parameter accel_prev;
+	Parameter gyro_prev;
 
 	void updateIsr() {
 		updateThread.signal_set(0x01);
@@ -90,8 +92,10 @@ private:
 		while (1) {
 			Thread::signal_wait(0x01);
 			readAll();
-			velocity += accel * MPU6500_UPDATE_PERIOD_US / 1000000;
-			angle += gyro * MPU6500_UPDATE_PERIOD_US / 1000000;
+			velocity += (accel + accel_prev) / 2 * MPU6500_UPDATE_PERIOD_US / 1000000;
+			accel_prev = accel;
+			angle += (gyro + gyro_prev) * MPU6500_UPDATE_PERIOD_US / 1000000;
+			gyro_prev = gyro;
 		}
 	}
 	void setup() {
