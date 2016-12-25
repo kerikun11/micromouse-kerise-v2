@@ -24,8 +24,7 @@ public:
 		setup();
 		updateThread.start(this, &MPU6500::updateTask);
 		DBG("0x%08X: MPU6500\n", (unsigned int ) updateThread.gettid());
-		updateTicker.attach_us(this, &MPU6500::updateIsr,
-		MPU6500_UPDATE_PERIOD_US);
+		updateTicker.attach_us(this, &MPU6500::updateIsr, MPU6500_UPDATE_PERIOD_US);
 	}
 	struct Parameter {
 		float x;
@@ -61,6 +60,9 @@ public:
 	Parameter angle;
 	Parameter velocity;
 	void calibration() {
+		updateTicker.detach();
+		angle = Parameter();
+		velocity = Parameter();
 		Parameter accel_sum, gyro_sum;
 		const int ave_count = 500;
 		for (int i = 0; i < ave_count; i++) {
@@ -75,6 +77,8 @@ public:
 		gyro_offset += gyro_sum;
 		angle = Parameter();
 		velocity = Parameter();
+		DBG("MPU6500 Calibration: %.3f\t%.3f\n", gyro_offset.z, accel_offset.y);
+		updateTicker.attach_us(this, &MPU6500::updateIsr, MPU6500_UPDATE_PERIOD_US);
 	}
 private:
 	DigitalOut cs;
@@ -94,7 +98,7 @@ private:
 			readAll();
 			velocity += (accel + accel_prev) / 2 * MPU6500_UPDATE_PERIOD_US / 1000000;
 			accel_prev = accel;
-			angle += (gyro + gyro_prev) * MPU6500_UPDATE_PERIOD_US / 1000000;
+			angle += (gyro + gyro_prev) / 2 * MPU6500_UPDATE_PERIOD_US / 1000000;
 			gyro_prev = gyro;
 		}
 	}
@@ -181,13 +185,13 @@ private:
 		cs = 1;
 		bond.h = rx[0];
 		bond.l = rx[1];
-		accel.x = bond.i / MPU6500_ACCEL_FACTOR * 1000 - accel_offset.x;
+		accel.x = bond.i / MPU6500_ACCEL_FACTOR * 1000 * 9.80665 - accel_offset.x;
 		bond.h = rx[2];
 		bond.l = rx[3];
-		accel.y = bond.i / MPU6500_ACCEL_FACTOR * 1000 - accel_offset.y;
+		accel.y = bond.i / MPU6500_ACCEL_FACTOR * 1000 * 9.80665 - accel_offset.y;
 		bond.h = rx[4];
 		bond.l = rx[5];
-		accel.z = bond.i / MPU6500_ACCEL_FACTOR * 1000 - accel_offset.z;
+		accel.z = bond.i / MPU6500_ACCEL_FACTOR * 1000 * 9.80665 - accel_offset.z;
 
 		bond.h = rx[8];
 		bond.l = rx[9];

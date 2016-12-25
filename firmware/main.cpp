@@ -312,7 +312,7 @@ void serial_ctrl() {
 void emergencyTask() {
 	while (1) {
 		Thread::wait(1);
-		if (mpu->accel.y < -9000) {	// -25
+		if (fabs(mpu->accel.y) > 48000 || fabs(mpu->gyro.z) > 8 * M_PI) {
 			mt->emergency_stop();
 			ms->terminate();
 			bz->play(Buzzer::EMERGENCY);
