@@ -15,8 +15,8 @@
 #define WALL_ATTACH_ENABLED			false
 #define WALL_AVOID_ENABLED			false
 
-#define LOOK_AHEAD_UNIT				8
-#define TRAJECTORY_PROP_GAIN		30
+#define LOOK_AHEAD_UNIT				5
+#define TRAJECTORY_PROP_GAIN		20
 #define TRAJECTORY_INTEGRAL_GAIN	0
 
 class Trajectory {
@@ -1160,7 +1160,7 @@ private:
 		}
 		while (1) {
 			Thread::signal_wait(0x01);
-			if (fabs(sc->actual.rot) < 0.1) break;
+			if (fabs(sc->actual.rot) < 0.2) break;
 			float extra = target_angle - getRelativePosition().theta;
 			float target_speed = sqrt(2 * accel * fabs(extra));
 			target_speed = (target_speed > speed) ? speed : target_speed;
@@ -1197,7 +1197,7 @@ private:
 			integral += dir.theta * TRAJECTORY_INTEGRAL_GAIN * MOVE_ACTION_PERIOD / 1000000;
 			sc->set_target(dir.x, (dir.theta + integral) * TRAJECTORY_PROP_GAIN);
 			if (cnt % 10 == 0) {
-//				DBG("%.3f\t%.3f\t%.4f\n", dir.x, dir.y, dir.theta);
+				dir.print("Dir");
 			}
 			cnt++;
 			wall_avoid();
@@ -1257,13 +1257,13 @@ private:
 							turn(M_PI / 2, omega);
 						}
 						for (int i = 0; i < 100; i++) {
-							sc->set_target(-i * 2, 0);
+							sc->set_target(-i, 0);
 							Thread::wait(1);
 						}
-						Thread::wait(400);
-						sc->disable();
-						mt->drive(-40, -40);
 						Thread::wait(200);
+						sc->disable();
+						mt->drive(-60, -60);
+						Thread::wait(400);
 						mt->drive(0, 0);
 						break;
 					case GO_STRAIGHT:

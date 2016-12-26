@@ -75,10 +75,10 @@ public:
 		gyro_sum /= ave_count;
 		accel_offset += accel_sum;
 		gyro_offset += gyro_sum;
-		angle = Parameter();
-		velocity = Parameter();
 		DBG("MPU6500 Calibration: %.3f\t%.3f\n", gyro_offset.z, accel_offset.y);
 		updateTicker.attach_us(this, &MPU6500::updateIsr, MPU6500_UPDATE_PERIOD_US);
+		angle = Parameter();
+		velocity = Parameter();
 	}
 private:
 	DigitalOut cs;

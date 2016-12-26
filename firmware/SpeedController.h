@@ -91,6 +91,9 @@ public:
 		y *= div;
 		return *this;
 	}
+	inline void print(const char* name = "") {
+		DBG("%s: (%.1f,\t%.1f,\t%.3f)\n", name, x, y, theta);
+	}
 };
 
 class SpeedController {

@@ -41,7 +41,8 @@ bool output = false;
 void debug_info() {
 	while (1) {
 		Thread::wait(100);
-		DBG("%.3f\t%.3f\n", mpu->gyro.z * 180 / M_PI, mpu->angle.z * 180 / M_PI);
+//		DBG("%.3f\t%.3f\n", mpu->gyro.z * 180 / M_PI, mpu->angle.z * 180 / M_PI);
+//		sc->getPosition().print();
 
 //		const int i = 0;
 //		if (output) LOG("%.0f,%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i] / 10,
@@ -126,6 +127,14 @@ void serial_ctrl() {
 				ma->set_action(MoveAction::FAST_TURN_RIGHT_4545);
 				bz->play(Buzzer::CONFIRM);
 				break;
+			case 'Q':
+				ma->set_action(MoveAction::FAST_TURN_LEFT_45S45);
+				bz->play(Buzzer::CONFIRM);
+				break;
+			case 'E':
+				ma->set_action(MoveAction::FAST_TURN_RIGHT_45S45);
+				bz->play(Buzzer::CONFIRM);
+				break;
 			case 'a':
 				ma->set_action(MoveAction::FAST_TURN_LEFT_90);
 				bz->play(Buzzer::CONFIRM);
@@ -172,16 +181,6 @@ void serial_ctrl() {
 				ma->set_action(MoveAction::FAST_TURN_LEFT_4545);
 				ma->set_action(MoveAction::FAST_TURN_RIGHT_4545);
 				ma->set_action(MoveAction::FAST_TURN_LEFT_45R);
-				ma->set_action(MoveAction::RETURN);
-				ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
-				ma->set_action(MoveAction::FAST_TURN_LEFT_4545);
-				ma->set_action(MoveAction::FAST_TURN_RIGHT_4545);
-				ma->set_action(MoveAction::FAST_TURN_LEFT_45R);
-				ma->set_action(MoveAction::RETURN);
-				ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
-				ma->set_action(MoveAction::FAST_TURN_LEFT_4545);
-				ma->set_action(MoveAction::FAST_TURN_RIGHT_4545);
-				ma->set_action(MoveAction::FAST_TURN_LEFT_45R);
 				ma->set_action(MoveAction::START_INIT);
 				bz->play(Buzzer::CONFIRM);
 				mpu->calibration();
@@ -199,6 +198,7 @@ void serial_ctrl() {
 				ma->set_action(MoveAction::RETURN);
 				ma->set_action(MoveAction::TURN_RIGHT_90);
 				ma->set_action(MoveAction::TURN_RIGHT_90);
+
 				ma->set_action(MoveAction::RETURN);
 				ma->set_action(MoveAction::TURN_LEFT_90);
 				ma->set_action(MoveAction::TURN_LEFT_90);
@@ -287,7 +287,7 @@ void serial_ctrl() {
 void emergencyTask() {
 	while (1) {
 		Thread::wait(1);
-		if (fabs(mpu->accel.y) > 48000 || fabs(mpu->gyro.z) > 8 * M_PI) {
+		if (fabs(mpu->accel.y) > 96000 || fabs(mpu->gyro.z) > 10 * M_PI) {
 			mt->emergency_stop();
 			ms->terminate();
 			bz->play(Buzzer::EMERGENCY);
@@ -425,11 +425,16 @@ int main() {
 			rfl->enable();
 			while (1) {
 				Thread::wait(10);
-				if (rfl->flont(0) > 300) {
+				if (rfl->flont(0) > 400 && rfl->flont(1) > 400) {
 					bz->play(Buzzer::CONFIRM);
 					Thread::wait(200);
 					switch (mode) {
 						case 0:
+							ms->terminate();
+							mpu->calibration();
+							bz->play(Buzzer::SELECT);
+							wd->calibration();
+							bz->play(Buzzer::CONFIRM);
 							ms->start();
 							break;
 						case 1:
@@ -508,7 +513,7 @@ int main() {
 							ma->set_action(MoveAction::FAST_GO_STRAIGHT, cnt);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
-							ma->set_action(MoveAction::START_INIT);
+							ma->set_action(MoveAction::FAST_STOP);
 							mpu->calibration();
 							wd->calibration();
 							ma->enable();
