@@ -1197,7 +1197,7 @@ private:
 			integral += dir.theta * TRAJECTORY_INTEGRAL_GAIN * MOVE_ACTION_PERIOD / 1000000;
 			sc->set_target(dir.x, (dir.theta + integral) * TRAJECTORY_PROP_GAIN);
 			if (cnt % 10 == 0) {
-				dir.print("Dir");
+//				dir.print("Dir");
 			}
 			cnt++;
 			wall_avoid();
