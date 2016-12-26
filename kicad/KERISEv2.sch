@@ -413,7 +413,7 @@ AXIS_MISO
 Text GLabel 10400 4600 2    50   Input ~ 0
 AXIS_INT
 $Sheet
-S 1300 2000 1000 500 
+S 1300 2000 1000 700 
 U 57CD8D81
 F0 "UI" 60
 F1 "UI.sch" 60
@@ -423,6 +423,8 @@ F4 "LED_2" I L 1300 2200 60
 F5 "LED_3" I L 1300 2300 60 
 F6 "LED_4" I L 1300 2400 60 
 F7 "BUTTON" I R 2300 2200 60 
+F8 "LED_5" I L 1300 2500 60 
+F9 "LED_6" I L 1300 2600 60 
 $EndSheet
 $Sheet
 S 3200 6600 600  800 
@@ -524,8 +526,6 @@ NoConn ~ 10300 2300
 NoConn ~ 10300 2700
 NoConn ~ 10300 3700
 NoConn ~ 10300 3800
-NoConn ~ 10300 5100
-NoConn ~ 10300 5200
 NoConn ~ 10300 5300
 NoConn ~ 10300 5400
 NoConn ~ 10300 5500
@@ -794,4 +794,20 @@ U 58410148
 F0 "Charger B" 60
 F1 "Charger.sch" 60
 $EndSheet
+Text GLabel 1200 2500 0    50   Input ~ 0
+LED_5
+Text GLabel 1200 2600 0    50   Input ~ 0
+LED_6
+Wire Wire Line
+	1200 2600 1300 2600
+Wire Wire Line
+	1300 2500 1200 2500
+Text GLabel 10400 5100 2    50   Input ~ 0
+LED_5
+Text GLabel 10400 5200 2    50   Input ~ 0
+LED_6
+Wire Wire Line
+	10400 5100 10300 5100
+Wire Wire Line
+	10300 5200 10400 5200
 $EndSCHEMATC
