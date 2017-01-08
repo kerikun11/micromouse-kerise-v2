@@ -41,23 +41,21 @@ bool output = false;
 
 void debug_info() {
 	while (1) {
-		Thread::wait(100);
+		Thread::wait(5);
 //		printf("%.3f,%.3f\n", mpu->velocity.y,sc->actual.trans);
 
 //		printf("%.3f\t%.3f\n", mpu->gyro.z * 180 / M_PI, mpu->angle.z * 180 / M_PI);
 //		sc->getPosition().print();
 
-//		const int i = 0;
-//		if (output) LOG("%.0f,%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i] / 10,
-//				sc->actual.wheel[i] / 10, sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]) / 10,
-//				sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]) / 10,
-//				sc->Kp * sc->Kd * (0 - sc->differential.wheel[i]) / 10);
-//		if (output) LOG("%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i]);
+		const int i = 0;
+		if (output)
+			printf("%.0f,%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i] / 10, sc->actual.wheel[i] / 10,
+					sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]) / 10,
+					sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]) / 10,
+					sc->Kp * sc->Kd * (0 - sc->differential.wheel[i]) / 10);
 
-//		if (output) LOG("%.0f,%.0f\n", sc->target.trans, sc->actual.trans);
-
-//		LOG("%.3f,%.3f\n", mpu->gyro.z, mpu->angle.z);
-//		LOG("%.0f,%.0f\n", mpu->accel.y, mpu->velocity.y);
+//		if (output)
+//			printf("%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i]);
 	}
 }
 
@@ -233,7 +231,9 @@ int main() {
 			}
 		}
 		bz->play(Buzzer::BOOT);
-		*led = bat->gage(256);
+		int gage = bat->gage(9);
+		for (int i = 0; i < gage; i++)
+			(*led)[i] = 1;
 		Thread::wait(1000);
 		*led = 0;
 	}
@@ -245,6 +245,26 @@ int main() {
 	serialCtrlThread.start(serial_ctrl);
 	Thread emergencyThread(PRIORITY_EMERGENCY_STOP, STACK_SIZE_EMERGENCY);
 	emergencyThread.start(emergencyTask);
+
+//	while (1) {
+//		while (1) {
+//			Thread::wait(10);
+//			if (btn->pressed) {
+//				btn->flags = 0;
+//				bz->play(Buzzer::CONFIRM);
+//				break;
+//			}
+//		}
+//		Thread::wait(1000);
+//		sc->enable();
+//		output = true;
+//		sc->set_target(600, 0);
+//		Thread::wait(400);
+//		sc->set_target(0, 0);
+//		Thread::wait(400);
+//		output = false;
+//		sc->disable();
+//	}
 
 	int mode = 0;
 	while (true) {

@@ -160,9 +160,9 @@ public:
 	WheelParameter actual;
 	WheelParameter integral;
 	WheelParameter differential;
-	const float Kp = 2.4f;
+	const float Kp = 1.80f;
 	const float Ki = 24.0f;
-	const float Kd = 0.01f;
+	const float Kd = 0.001f;
 private:
 	Motor *mt;
 	Encoders *enc;
