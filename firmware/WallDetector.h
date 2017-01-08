@@ -13,25 +13,12 @@
 #include "Reflector.h"
 
 #define WALL_UPDATE_PERIOD_US		1000
-#define WALL_DETECTOR_FLONT_RATIO	1.33f
 
 class WallDetector {
 public:
 	WallDetector(Reflector *rfl) :
 			rfl(rfl), updateThread(PRIORITY_WALL_UPDATE, STACK_SIZE_WALL_UPDATE) {
-
-//		_wall_ref.side[0] = 260;
-//		_wall_ref.side[1] = 260;
-//		_wall_ref.flont[0] = 200;
-//		_wall_ref.flont[1] = 200;
-
-//		_wall_distance.side[0] = 900;
-//		_wall_distance.side[1] = 700;
-//		_wall_distance.flont[0] = 560;
-//		_wall_distance.flont[1] = 560;
-
 		updateThread.start(this, &WallDetector::updateTask);
-		DBG("0x%08X: Wall Detector\n", (unsigned int) updateThread.gettid());
 		updateTicker.attach_us(this, &WallDetector::updateIsr,
 		WALL_UPDATE_PERIOD_US);
 	}
@@ -55,11 +42,11 @@ public:
 		for (int i = 0; i < 2; i++) {
 			_wall_distance.flont[i] = WALL_DETECTOR_FLONT_RATIO
 					* (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
-			_wall_ref.flont[i] = _wall_distance.flont[i] / 9;
+			_wall_ref.flont[i] = _wall_distance.flont[i] / 9; // KERISEv1: 5 KERISEv2: 9
 		}
-		DBG("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],
-				(int) _wall_distance.flont[0], (int) _wall_distance.flont[1],
-				(int) _wall_distance.side[1]);
+		printf("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int ) _wall_distance.side[0],
+		(int ) _wall_distance.flont[0], (int ) _wall_distance.flont[1],
+		(int ) _wall_distance.side[1]);
 	}
 	struct WALL {
 		bool side[2];
@@ -98,14 +85,14 @@ private:
 				if (value > _wall_ref.side[i] * 1.02) _wall.side[i] = true;
 				else if (value < _wall_ref.side[i] * 0.98) _wall.side[i] = false;
 				_wall_difference.side[i] = (_wall_distance.side[i] - value)
-						/ _wall_distance.side[i];
+				/ _wall_distance.side[i];
 			}
 			for (int i = 0; i < 2; i++) {
 				int16_t value = rfl->flont(i);
 				if (value > _wall_ref.flont[i] * 1.02) _wall.flont[i] = true;
 				else if (value < _wall_ref.flont[i] * 0.98) _wall.flont[i] = false;
 				_wall_difference.flont[i] = (_wall_distance.flont[i] - value)
-						/ _wall_distance.flont[i];
+				/ _wall_distance.flont[i];
 			}
 		}
 	}

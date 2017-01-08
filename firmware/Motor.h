@@ -11,19 +11,6 @@
 #include "mbed.h"
 #include "config.h"
 
-#define MOTOR_TIMx						TIM2
-#define MOTOR_TIMx_CLK_ENABLE()			__HAL_RCC_TIM2_CLK_ENABLE()
-#define MOTOR_TIMx_CHANNEL_GPIO_PORT()	do{__HAL_RCC_GPIOA_CLK_ENABLE();__HAL_RCC_GPIOB_CLK_ENABLE();}while(0)
-#define MOTOR_TIMx_GPIO_PORT_CHANNEL1	GPIOA
-#define MOTOR_TIMx_GPIO_PORT_CHANNEL2	GPIOA
-#define MOTOR_TIMx_GPIO_PORT_CHANNEL3	GPIOB
-#define MOTOR_TIMx_GPIO_PORT_CHANNEL4	GPIOB
-#define MOTOR_TIMx_GPIO_PIN_CHANNEL1	GPIO_PIN_0
-#define MOTOR_TIMx_GPIO_PIN_CHANNEL2	GPIO_PIN_1
-#define MOTOR_TIMx_GPIO_PIN_CHANNEL3	GPIO_PIN_10
-#define MOTOR_TIMx_GPIO_PIN_CHANNEL4	GPIO_PIN_11
-#define MOTOR_TIMx_GPIO_AF_CHANNEL		GPIO_AF1_TIM2
-
 #define MOTOR_PERIOD_VALUE				(1000 - 1)
 
 class Motor {
@@ -61,7 +48,7 @@ public:
 		TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
 		TimHandle.Init.RepetitionCounter = 0;
 		if (HAL_TIM_PWM_Init(&TimHandle) != HAL_OK) {
-			DBG("Couldn't Init PWM\r\n");
+			printf("Couldn't Init PWM\r\n");
 			while (1) {
 			}
 		}

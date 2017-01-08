@@ -40,23 +40,29 @@
 #define STACK_SIZE_REFLECTOR_UPDATE	512
 #define STACK_SIZE_SPEED_CONTROLLER	1024
 #define STACK_SIZE_WALL_UPDATE		512
-
 #define STACK_SIZE_DEBUG_INFO		2048
 #define STACK_SIZE_SERIAL_CTRL		2048
 #define STACK_SIZE_EMERGENCY		512
 
 /* Hardware Parameter */
 
-#define MACHINE_ROTATION_RADIUS		21.0f	// [mm]
+#define MACHINE_ROTATION_RADIUS		21.6f	// [mm]
 #define WHEEL_DIAMETER_MM			24.65f
 #define WHEEL_GEER_RATIO			0.25f
 #define ENCODER_PULSES				(1024*4)
+
+/* Calibration Parameter */
+
+//#define WALL_DETECTOR_FLONT_RATIO	1.82f	/* KERISEv1 */
+#define WALL_DETECTOR_FLONT_RATIO	1.33f	/* KERISEv2 */
+
+#define MPU6500_UPDATE_PERIOD_US	1000
 
 /* Pin Mapping */
 
 #define BATTERY_PIN			PB_1
 
-#define BUZZER_PIN			PB_8	//< Modify PeripheralPins.c PWM Pin using Timer10
+#define BUZZER_PIN			PB_9	//< Modify PeripheralPins.c PWM Pin using Timer11
 
 #define BUTTON_PIN			PB_0
 
@@ -64,6 +70,10 @@
 #define LED2_PIN			PC_6
 #define LED3_PIN			PC_7
 #define LED4_PIN			PC_8
+#define LED5_PIN			PC_9
+#define LED6_PIN			PC_10
+#define LED7_PIN			PC_11
+#define LED8_PIN			PC_12
 
 #define MPU6500_MOSI_PIN	PA_7
 #define MPU6500_MISO_PIN	PA_6
@@ -73,24 +83,41 @@
 #define IR_LED_SL_FR_PIN	PB_14
 #define IR_LED_SR_FL_PIN	PB_15
 
-/* debug output */
-//Debug is disabled by default
-#if 1
-#define DBG(x, ...)  std::printf(x, ##__VA_ARGS__)
-#define WARN(x, ...) std::printf("[WARN] " x, ##__VA_ARGS__)
-#define ERR(x, ...)  std::printf("[ERR] " x, ##__VA_ARGS__)
-#else
-#define DBG(x, ...) //wait_us(10);
-#define WARN(x, ...) //wait_us(10);
-#define ERR(x, ...)
-#endif
+#define MOTOR_TIMx						TIM2
+#define MOTOR_TIMx_CLK_ENABLE()			__HAL_RCC_TIM2_CLK_ENABLE()
+#define MOTOR_TIMx_CHANNEL_GPIO_PORT()	do{__HAL_RCC_GPIOA_CLK_ENABLE();__HAL_RCC_GPIOB_CLK_ENABLE();}while(0)
+#define MOTOR_TIMx_GPIO_PORT_CHANNEL1	GPIOA
+#define MOTOR_TIMx_GPIO_PORT_CHANNEL2	GPIOA
+#define MOTOR_TIMx_GPIO_PORT_CHANNEL3	GPIOB
+#define MOTOR_TIMx_GPIO_PORT_CHANNEL4	GPIOB
+#define MOTOR_TIMx_GPIO_PIN_CHANNEL1	GPIO_PIN_0
+#define MOTOR_TIMx_GPIO_PIN_CHANNEL2	GPIO_PIN_1
+#define MOTOR_TIMx_GPIO_PIN_CHANNEL3	GPIO_PIN_10
+#define MOTOR_TIMx_GPIO_PIN_CHANNEL4	GPIO_PIN_11
+#define MOTOR_TIMx_GPIO_AF_CHANNEL		GPIO_AF1_TIM2
 
-//Debug is disabled by default
-#if 0
-#define LOG(x, ...)  printf(x, ##__VA_ARGS__)
-#else
-#define LOG(x, ...) //wait_us(10);
-#endif
+/* Definition for ADCx clock resources */
+#define ADCx_S							ADC2
+#define ADCx_F							ADC3
+#define ADCx_S_CLK_ENABLE()				__HAL_RCC_ADC2_CLK_ENABLE()
+#define ADCx_F_CLK_ENABLE()				__HAL_RCC_ADC3_CLK_ENABLE()
+#define ADCx_CHANNEL_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOC_CLK_ENABLE()
+
+#define ADCx_FORCE_RESET()              __HAL_RCC_ADC_FORCE_RESET()
+#define ADCx_RELEASE_RESET()            __HAL_RCC_ADC_RELEASE_RESET()
+
+/* Definition for ADCx Channel Pin */
+#define ADCx_CHANNEL_SL_PIN             GPIO_PIN_0
+#define ADCx_CHANNEL_FL_PIN             GPIO_PIN_1
+#define ADCx_CHANNEL_FR_PIN             GPIO_PIN_2
+#define ADCx_CHANNEL_SR_PIN             GPIO_PIN_3
+#define ADCx_CHANNEL_GPIO_PORT          GPIOC
+
+/* Definition for ADCx's Channel */
+#define ADCx_CHANNEL_SL					ADC_CHANNEL_10
+#define ADCx_CHANNEL_FL					ADC_CHANNEL_11
+#define ADCx_CHANNEL_FR					ADC_CHANNEL_12
+#define ADCx_CHANNEL_SR					ADC_CHANNEL_13
 
 /*
  * TIM1		IR LED

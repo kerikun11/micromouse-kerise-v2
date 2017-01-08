@@ -92,15 +92,15 @@ public:
 		return *this;
 	}
 	inline void print(const char* name = "") {
-		DBG("%s: (%.1f,\t%.1f,\t%.3f)\n", name, x, y, theta);
+		printf("%s: (%.1f,\t%.1f,\t%.3f)\n", name, x, y, theta);
 	}
 };
 
 class SpeedController {
 public:
 	SpeedController(Motor *mt, Encoders *enc, MPU6500 *mpu) :
-			mt(mt), enc(enc), mpu(mpu),
-					ctrlThread(PRIORITY_SPEED_CONTROLLER, STACK_SIZE_SPEED_CONTROLLER) {
+			mt(mt), enc(enc), mpu(mpu), ctrlThread(PRIORITY_SPEED_CONTROLLER,
+			STACK_SIZE_SPEED_CONTROLLER) {
 		ctrlThread.start(this, &SpeedController::ctrlTask);
 		for (int i = 0; i < 2; i++) {
 			target.wheel[i] = 0;
@@ -185,17 +185,14 @@ private:
 				wheel_position[0][i] = enc->position(i);
 			}
 			for (int i = 0; i < 2; i++) {
-				actual.wheel[i] = (wheel_position[0][i] - wheel_position[1][i])
-						* 1000000/ SPEED_CONTROLLER_PERIOD_US;
+				actual.wheel[i] = (wheel_position[0][i] - wheel_position[1][i]) * 1000000 / SPEED_CONTROLLER_PERIOD_US;
 			}
 			actual.wheel2pole();
+//			actual.trans = mpu->velocity.y;
 			actual.rot = mpu->gyro.z;
 			actual.pole2wheel();
 			for (int i = 0; i < 2; i++) {
-				integral.wheel[i] += (actual.wheel[i] - target.wheel[i])
-						* SPEED_CONTROLLER_PERIOD_US / 1000000;
-//				differential.wheel[i] = (wheel_position[0][i] - 2 * wheel_position[1][i]
-//						+ wheel_position[2][i]) * 1000000 / SPEED_CONTROLLER_PERIOD_US;
+				integral.wheel[i] += (actual.wheel[i] - target.wheel[i]) * SPEED_CONTROLLER_PERIOD_US / 1000000;
 			}
 			differential.wheel2pole();
 			differential.trans = mpu->accel.y;
@@ -203,17 +200,16 @@ private:
 			differential.pole2wheel();
 			float pwm_value[2];
 			for (int i = 0; i < 2; i++) {
-				pwm_value[i] = Kp * (target.wheel[i] - actual.wheel[i])
-						+ Kp * Ki * (0 - integral.wheel[i]) + Kp * Kd * (0 - differential.wheel[i]);
+				pwm_value[i] = Kp * (target.wheel[i] - actual.wheel[i]) + Kp * Ki * (0 - integral.wheel[i])
+						+ Kp * Kd * (0 - differential.wheel[i]);
 			}
 			mt->drive(pwm_value[0], pwm_value[1]);
 
-			position.theta += (actual_prev.rot + actual.rot) / 2 * SPEED_CONTROLLER_PERIOD_US
+			position.theta += (actual_prev.rot + actual.rot) / 2 * SPEED_CONTROLLER_PERIOD_US / 1000000;
+			position.x += (actual_prev.trans + actual.trans) / 2 * cos(position.theta) * SPEED_CONTROLLER_PERIOD_US
 					/ 1000000;
-			position.x += (actual_prev.trans + actual.trans) / 2 * cos(position.theta)
-					* SPEED_CONTROLLER_PERIOD_US / 1000000;
-			position.y += (actual_prev.trans + actual.trans) / 2 * sin(position.theta)
-					* SPEED_CONTROLLER_PERIOD_US / 1000000;
+			position.y += (actual_prev.trans + actual.trans) / 2 * sin(position.theta) * SPEED_CONTROLLER_PERIOD_US
+					/ 1000000;
 
 			actual_prev.trans = actual.trans;
 			actual_prev.rot = actual.rot;
