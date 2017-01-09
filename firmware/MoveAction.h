@@ -19,7 +19,7 @@
 
 //#define LOOK_AHEAD_UNIT				10
 //#define DETERMINE_VELOCITY_UNIT		10
-#define TRAJECTORY_PROP_GAIN		50
+#define TRAJECTORY_PROP_GAIN		20
 #define TRAJECTORY_INT_GAIN			10
 
 class Trajectory {
@@ -43,7 +43,7 @@ public:
 //			float theta = fabs(t1 - t2) * 3 + fabs(t2 - t3) * 2 + fabs(t3 - t4);
 //			velocity *= 1 / (1 + theta / 6);
 		}
-		int look_ahead = 60;
+		int look_ahead = 30;
 		Position dir = (getPosition(index_cur + look_ahead) - cur).rotate(-cur.theta);
 		dir.theta = atan2f(dir.y, dir.x);
 		dir *= velocity / look_ahead;

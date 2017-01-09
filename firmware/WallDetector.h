@@ -40,13 +40,11 @@ public:
 			_wall_ref.side[i] = _wall_distance.side[i] / 3;
 		}
 		for (int i = 0; i < 2; i++) {
-			_wall_distance.flont[i] = WALL_DETECTOR_FLONT_RATIO
-					* (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
-			_wall_ref.flont[i] = _wall_distance.flont[i] / 9; // KERISEv1: 5 KERISEv2: 9
+			_wall_distance.flont[i] = WALL_DETECTOR_FLONT_RATIO * (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
+			_wall_ref.flont[i] = _wall_distance.flont[i] / 6; // KERISEv1: 5 KERISEv2: 9
 		}
-		printf("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int ) _wall_distance.side[0],
-		(int ) _wall_distance.flont[0], (int ) _wall_distance.flont[1],
-		(int ) _wall_distance.side[1]);
+		printf("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],
+				(int) _wall_distance.flont[0], (int) _wall_distance.flont[1], (int) _wall_distance.side[1]);
 	}
 	struct WALL {
 		bool side[2];
@@ -82,17 +80,19 @@ private:
 
 			for (int i = 0; i < 2; i++) {
 				int16_t value = rfl->side(i);
-				if (value > _wall_ref.side[i] * 1.02) _wall.side[i] = true;
-				else if (value < _wall_ref.side[i] * 0.98) _wall.side[i] = false;
-				_wall_difference.side[i] = (_wall_distance.side[i] - value)
-				/ _wall_distance.side[i];
+				if (value > _wall_ref.side[i] * 1.02)
+					_wall.side[i] = true;
+				else if (value < _wall_ref.side[i] * 0.98)
+					_wall.side[i] = false;
+				_wall_difference.side[i] = (_wall_distance.side[i] - value) / _wall_distance.side[i];
 			}
 			for (int i = 0; i < 2; i++) {
 				int16_t value = rfl->flont(i);
-				if (value > _wall_ref.flont[i] * 1.02) _wall.flont[i] = true;
-				else if (value < _wall_ref.flont[i] * 0.98) _wall.flont[i] = false;
-				_wall_difference.flont[i] = (_wall_distance.flont[i] - value)
-				/ _wall_distance.flont[i];
+				if (value > _wall_ref.flont[i] * 1.02)
+					_wall.flont[i] = true;
+				else if (value < _wall_ref.flont[i] * 0.98)
+					_wall.flont[i] = false;
+				_wall_difference.flont[i] = (_wall_distance.flont[i] - value) / _wall_distance.flont[i];
 			}
 		}
 	}

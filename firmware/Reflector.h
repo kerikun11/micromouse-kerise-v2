@@ -12,7 +12,7 @@
 #include "config.h"
 
 #define IR_LED_PERIOD_US				500
-#define IR_LED_DUTY_US					5
+#define IR_LED_DUTY_US					50
 
 #define IR_RECEIVER_SAMPLE_SIZE			25
 #define IR_RECEIVER_SAMPLING_PERIOD_US	20

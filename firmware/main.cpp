@@ -41,7 +41,7 @@ bool output = false;
 
 void debug_info() {
 	while (1) {
-		Thread::wait(100);
+		Thread::wait(200);
 //		printf("%.3f,%.3f\n", mpu->velocity.y,sc->actual.trans);
 
 //		printf("%.3f\t%.3f\n", mpu->gyro.z * 180 / M_PI, mpu->angle.z * 180 / M_PI);
@@ -75,8 +75,8 @@ void serial_ctrl() {
 		switch (c) {
 		case 't':
 			bz->play(Buzzer::CONFIRM);
-			rfl->enable();
 			mpu->calibration();
+			wd->calibration();
 			break;
 		case 'g':
 			bz->play(Buzzer::CONFIRM);
@@ -178,7 +178,7 @@ void serial_ctrl() {
 void emergencyTask() {
 	while (1) {
 		Thread::wait(1);
-		if (fabs(mpu->accel.y) > 98000 || fabs(mpu->gyro.z) > 12 * M_PI) {
+		if (fabs(mpu->accel.y) > 98000 || fabs(mpu->gyro.z) > 10 * M_PI) {
 			mt->emergency_stop();
 			ms->terminate();
 			bz->play(Buzzer::EMERGENCY);

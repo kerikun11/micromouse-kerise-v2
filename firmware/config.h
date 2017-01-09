@@ -54,7 +54,7 @@
 /* Calibration Parameter */
 
 //#define WALL_DETECTOR_FLONT_RATIO	1.82f	/* KERISEv1 */
-#define WALL_DETECTOR_FLONT_RATIO	1.33f	/* KERISEv2 */
+#define WALL_DETECTOR_FLONT_RATIO	1.0f	/* KERISEv2 */
 
 #define MPU6500_UPDATE_PERIOD_US	1000
 
