@@ -12,7 +12,7 @@
 #include "config.h"
 
 #define IR_LED_PERIOD_US				500
-#define IR_LED_DUTY_US					50
+#define IR_LED_DUTY_US					20
 
 #define IR_RECEIVER_SAMPLE_SIZE			25
 #define IR_RECEIVER_SAMPLING_PERIOD_US	20
@@ -21,8 +21,8 @@
 class Reflector {
 public:
 	Reflector(PinName led_sl_fr_pin, PinName led_sr_fl_pin) :
-			led_sl_fr(led_sl_fr_pin), led_sr_fl(led_sr_fl_pin),
-					updateThread(PRIORITY_REFLECTOR_UPDATE, STACK_SIZE_REFLECTOR_UPDATE) {
+			led_sl_fr(led_sl_fr_pin), led_sr_fl(led_sr_fl_pin), updateThread(PRIORITY_REFLECTOR_UPDATE,
+					STACK_SIZE_REFLECTOR_UPDATE) {
 		led_sl_fr.period_us(IR_LED_PERIOD_US);
 		led_sr_fl.period_us(IR_LED_PERIOD_US);
 		adcInitialize();
@@ -45,12 +45,16 @@ public:
 		ir_led(false, false);
 	}
 	int16_t side(uint8_t left_or_right) {
-		if (left_or_right == 0) return sl();
-		else return sr();
+		if (left_or_right == 0)
+			return sl();
+		else
+			return sr();
 	}
 	int16_t flont(uint8_t left_or_right) {
-		if (left_or_right == 0) return fl();
-		else return fr();
+		if (left_or_right == 0)
+			return fl();
+		else
+			return fr();
 	}
 	int16_t sl() {
 		return distance[1];
@@ -124,10 +128,10 @@ private:
 		HAL_ADC_ConfigChannel(&AdcHandle_F, &sConfig);
 	}
 	void samplingIsr() {
-		buffer[buffer_pointer / IR_RECEIVER_SAMPLE_SIZE + 0][buffer_pointer
-				% IR_RECEIVER_SAMPLE_SIZE] = HAL_ADC_GetValue(&AdcHandle_S);
-		buffer[buffer_pointer / IR_RECEIVER_SAMPLE_SIZE + 2][buffer_pointer
-				% IR_RECEIVER_SAMPLE_SIZE] = HAL_ADC_GetValue(&AdcHandle_F);
+		buffer[buffer_pointer / IR_RECEIVER_SAMPLE_SIZE + 0][buffer_pointer % IR_RECEIVER_SAMPLE_SIZE] =
+				HAL_ADC_GetValue(&AdcHandle_S);
+		buffer[buffer_pointer / IR_RECEIVER_SAMPLE_SIZE + 2][buffer_pointer % IR_RECEIVER_SAMPLE_SIZE] =
+				HAL_ADC_GetValue(&AdcHandle_F);
 		buffer_pointer++;
 		if (buffer_pointer == IR_RECEIVER_SAMPLE_SIZE) {
 			set_adc_sl_fr();
