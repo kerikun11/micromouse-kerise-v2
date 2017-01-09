@@ -41,18 +41,24 @@ bool output = false;
 
 void debug_info() {
 	while (1) {
-		Thread::wait(5);
+		Thread::wait(100);
 //		printf("%.3f,%.3f\n", mpu->velocity.y,sc->actual.trans);
 
 //		printf("%.3f\t%.3f\n", mpu->gyro.z * 180 / M_PI, mpu->angle.z * 180 / M_PI);
 //		sc->getPosition().print();
 
-		const int i = 0;
-		if (output)
-			printf("%.0f,%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i] / 10, sc->actual.wheel[i] / 10,
-					sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]) / 10,
-					sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]) / 10,
-					sc->Kp * sc->Kd * (0 - sc->differential.wheel[i]) / 10);
+//		printf("%05u\t%05u\t%05u\t%05u\n", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
+//		printf("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0], wd->wall_difference().flont[0],
+//				wd->wall_difference().flont[1], wd->wall_difference().side[1]);
+//		printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().flont[0] ? "X" : ".",
+//				wd->wall().flont[1] ? "X" : ".", wd->wall().side[1] ? "X" : ".");
+
+//		const int i = 0;
+//		if (output)
+//			printf("%.0f,%.0f,%.0f,%.0f,%.0f\n", sc->target.wheel[i] / 10, sc->actual.wheel[i] / 10,
+//					sc->Kp * (sc->target.wheel[i] - sc->actual.wheel[i]) / 10,
+//					sc->Kp * sc->Ki * (0 - sc->integral.wheel[i]) / 10,
+//					sc->Kp * sc->Kd * (0 - sc->differential.wheel[i]) / 10);
 
 //		if (output)
 //			printf("%.0f,%.0f\n", sc->target.wheel[i], sc->actual.wheel[i]);
@@ -67,17 +73,9 @@ void serial_ctrl() {
 			continue;
 		printf("%c\n", (char) c);
 		switch (c) {
-		case '0':
-			bz->play(Buzzer::CONFIRM);
-			Thread::wait(1000);
-			sc->enable();
-			sc->set_target(100, 0);
-			Thread::wait(1000);
-			sc->set_target(0, 0);
-			Thread::wait(1000);
-			break;
 		case 't':
 			bz->play(Buzzer::CONFIRM);
+			rfl->enable();
 			mpu->calibration();
 			break;
 		case 'g':
