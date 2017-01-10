@@ -15,8 +15,11 @@
 
 class Position {
 public:
-	Position(float x = 0, float y = 0, float theta = 0) :
+	Position(const float x = 0, const float y = 0, const float theta = 0) :
 			x(x), y(y), theta(theta) {
+	}
+	Position(const float pos[3]) :
+			x(pos[0]), y(pos[1]), theta(pos[2]) {
 	}
 	float x, y, theta;
 
@@ -25,12 +28,12 @@ public:
 		y = 0;
 		theta = 0;
 	}
-	inline void set(float x = 0, float y = 0, float theta = 0) {
+	inline void set(const float x = 0, const float y = 0, const float theta = 0) {
 		this->x = x;
 		this->y = y;
 		this->theta = theta;
 	}
-	inline Position rotate(float angle) {
+	inline Position rotate(const float angle) {
 		float _x = x;
 		float _y = y;
 		x = _x * cos(angle) - _y * sin(angle);
@@ -40,10 +43,8 @@ public:
 	inline float getNorm() const {
 		return sqrt(x * x + y * y);
 	}
-	inline Position mirror_x() {
-		y = -y;
-		theta = -theta;
-		return *this;
+	inline Position mirror_x() const {
+		return Position(x, -y, -theta);
 	}
 	inline Position operator=(const Position &obj) {
 		x = obj.x;
