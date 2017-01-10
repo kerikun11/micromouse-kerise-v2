@@ -1,5 +1,5 @@
 clear;
-%%{
+%{
 % curve90 (search)
 v_const = 600;
 pos_start = [0; 0; 0];
@@ -7,13 +7,13 @@ pos_end = [90; 90; pi/2];
 %}
 %{
 % curve90 (fast)
-v_const = 920;
+v_const = 900;
 pos_start = [0; 0; 0];
 pos_end = [90; 90; pi/2];
 %}
 %{
 % curve45 (fast)
-v_const = 2000;
+v_const = 2050;
 pos_start = [0; 0; 0];
 pos_end = [180; 90; pi/4];
 %}
@@ -36,7 +36,7 @@ pos_start = [0; 0; 0];
 pos_end = [0; 180; pi];
 %}
 
-omega_max = 6 * pi;
+omega_max = 6 * pi * v_const / 500;
 dt = 1/v_const/100;
 
 T = (pos_end(3)-pos_start(3))/(1/2 - 1/(4*pi)*cos(2*pi-pi/2))/omega_max;
