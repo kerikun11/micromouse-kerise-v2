@@ -104,7 +104,7 @@ xlabel('x', 'FontSize', 11);
 ylabel('y', 'FontSize', 11);
 
 pos_all = [pos_1st; pos_2nd; pos_3rd];
-data = pos_all(1:500:size(pos_all, 1),:);
+data = pos_all(1:100:size(pos_all, 1),:);
 format short;
 csvwrite('data.csv', data);
 

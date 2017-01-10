@@ -6,27 +6,23 @@ angle = pi/2;
 %}
 %{
 % curve45 (fast)
-v_const = 1000*90/(73.5498-30.4639);
-pos_start = [0; 0; 0];
-pos_end = [180; 90; pi/4];
+v_const = 2000*90/(147.0910242301666-60.9243357157356);
+angle = pi/4;
 %}
 %{
 % curveV90 (fast)
-v_const = 1300;
-pos_start = [0; 0; 0];
-pos_end = [90*sqrt(2); 90*sqrt(2); pi/2];
+v_const = 1306.7;
+angle = pi/2;
 %}
 %{
 % curve135 (fast)
 v_const = 872*180/(52.5251+126.8067);
-pos_start = [0; 0; 0];
-pos_end = [0; 180; pi*3/4];
+angle = pi*3/4;
 %}
 %{
 % curve180 (fast)
 v_const = 1300*180/168.4119;
-pos_start = [0; 0; 0];
-pos_end = [0; 180; pi];
+angle = pi;
 %}
 
 omega_max = 6 * pi;
@@ -70,7 +66,10 @@ ylabel('y', 'FontSize', 11);
 
 pos(end, :)
 
-data = pos(1:100:size(pos, 1), :);
-format short;
-csvwrite('data.csv',data);
+v_const
 
+%pos(end, 1)-(180-pos(end, 2))
+%pos(end, 1)-(180-pos(end, 2))
+
+data = pos(1:100:size(pos, 1), :);
+dlmwrite('data.csv',data,'precision','%.8f');
