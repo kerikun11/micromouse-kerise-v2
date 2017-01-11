@@ -17,8 +17,8 @@
 #define WALL_ATTACH_ENABLED			false
 #define WALL_AVOID_ENABLED			false
 
-#define LOOK_AHEAD_UNIT				10
-#define TRAJECTORY_PROP_GAIN		50
+#define LOOK_AHEAD_UNIT				8
+#define TRAJECTORY_PROP_GAIN		40
 #define TRAJECTORY_INT_GAIN			0
 
 class Trajectory {
@@ -33,10 +33,9 @@ public:
 	}
 	Position getNextDir(const Position &cur, float velocity) {
 		int index_cur = getNextIndex(cur);
-		int look_ahead = LOOK_AHEAD_UNIT * (1.0f + velocity / 1000);
+		int look_ahead = LOOK_AHEAD_UNIT * (1.0f + pow(velocity / 600, 2));
 		Position dir = (getPosition(index_cur + look_ahead) - cur).rotate(-cur.theta);
 		dir.theta = atan2f(dir.y, dir.x);
-//		dir *= velocity / look_ahead;
 		return dir;
 	}
 	float getRemain() const {
@@ -111,7 +110,8 @@ public:
 	C45(bool mirror = false) :
 			Trajectory(), mirror(mirror) {
 	}
-	const float velocity = 2089.04f;
+//	const float velocity = 2089.04f;
+	const float velocity = 1800.0f;
 private:
 	bool mirror;
 	virtual int size() const {
@@ -444,7 +444,7 @@ private:
 		updateOrigin(Position(0, 0, target_angle));
 	}
 	void straight_x(const float distance, const float v_max, const float v_end) {
-		const float accel = 9000;
+		const float accel = 6000;
 		const float decel = 3000;
 		Trajectory st;
 		timer.reset();
@@ -577,8 +577,8 @@ private:
 	}
 	void fastRun() {
 		const float velocity = 600;
-		const float v_max = 1200;
-		const float curve_gain = 0.4f;
+		const float v_max = 1800;
+		const float curve_gain = 0.6f;
 		setPosition();
 		straight_x(180 - 24 - 6, velocity, velocity);
 		printPosition("S");

@@ -4,7 +4,7 @@ clear;
 v_const = 2088.515;
 angle = pi/4;
 %}
-%%{
+%{
 % curve45_45 (fast)
 v_const = 1306.491;
 angle = pi/2;
@@ -19,7 +19,7 @@ angle = pi/2;
 v_const = 978.16;
 angle = pi/2;
 %}
-%{
+%%{
 % curve135 (fast)
 v_const = 1056.21;
 angle = pi*3/4;
@@ -69,17 +69,17 @@ for i = 1:size(theta, 2)
     pos = [pos; pos_cur'];
 end
 
-subplot(4,1,1);
+subplot(6,1,1);
 plot(t, omega, '.', 'MarkerSize', 6); grid on;
 title('äpë¨ìx', 'FontSize', 11);
 xlabel('t', 'FontSize', 11);
 ylabel('\omega', 'FontSize', 11);
-subplot(4,1,2);
+subplot(6,1,2);
 plot(t, theta, '.', 'MarkerSize', 6); grid on;
 title('épê®äp', 'FontSize', 11);
 xlabel('t', 'FontSize', 11);
 ylabel('\theta', 'FontSize', 11);
-subplot(4,1,[3,4]);
+subplot(6,1,[3,6]);
 hold off;
 plot(pos(:,1),pos(:,2), '.', 'MarkerSize', 6);
 title('à íu', 'FontSize', 11);

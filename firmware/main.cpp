@@ -364,12 +364,16 @@ int main() {
 						ma->enable();
 						break;
 					case 3:
+						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
 						for (int i = 0; i < 4; i++) {
-							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
-							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
-							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
