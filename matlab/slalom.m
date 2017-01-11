@@ -36,7 +36,7 @@ pos_start = [0; 0; 0];
 pos_end = [0; 180; pi];
 %}
 
-omega_max = 6 * pi * v_const / 500;
+omega_max = 6 * pi;
 dt = 1/v_const/100;
 
 T = (pos_end(3)-pos_start(3))/(1/2 - 1/(4*pi)*cos(2*pi-pi/2))/omega_max;

@@ -1,12 +1,12 @@
 clear;
 %{
 % curve45 (fast)
-v_const = 2089.04;
+v_const = 2088.515;
 angle = pi/4;
 %}
-%{
+%%{
 % curve45_45 (fast)
-v_const = 1383.38;
+v_const = 1306.491;
 angle = pi/2;
 %}
 %{
@@ -30,10 +30,10 @@ v_const = 1623.31;
 angle = pi;
 %}
 
-omega_dot = 128* pi;
+omega_dot = 96* pi;
 omega_max = 6 * pi;
 
-dt = 1/v_const/200;
+dt = 1/v_const/100;
 T1 = omega_max/omega_dot*pi/2;
 T2 = angle/omega_max-T1;
 
@@ -89,10 +89,8 @@ ylabel('y', 'FontSize', 11);
 
 pos(end, :)
 
-v_const
-%180-pos(end, 1)
-%180-pos(end, 1)-(90-pos(end, 2))   % 45
-%pos(end, 1)-90*sqrt(2)             % 45 45
+%(90-pos(end, 2))-(180-pos(end, 1))   % 45
+pos(end, 1)-90*sqrt(2)             % 45 45
 %pos(end, 1)-(180-pos(end, 2))      % 135
 %pos(end, 1)-180*sqrt(2)             % 45_S_45
 
