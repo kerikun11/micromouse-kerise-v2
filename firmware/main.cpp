@@ -116,33 +116,29 @@ void serial_ctrl() {
 			ma->set_action(MoveAction::RETURN);
 			bz->play(Buzzer::SELECT);
 			break;
+		case 'z':
+			ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+			bz->play(Buzzer::SELECT);
+			break;
+		case 'x':
+			ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+			bz->play(Buzzer::SELECT);
+			break;
+		case 'c':
+			ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+			bz->play(Buzzer::SELECT);
+			break;
 		case 'u':
 			ms->terminate();
 			ma->set_action(MoveAction::START_STEP);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::RETURN);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::RETURN);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::RETURN);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::RETURN);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::RETURN);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::RETURN);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::TURN_RIGHT_90);
-			ma->set_action(MoveAction::RETURN);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::TURN_LEFT_90);
-			ma->set_action(MoveAction::RETURN);
+			for (int i = 0; i < 5; i++) {
+				ma->set_action(MoveAction::TURN_RIGHT_90);
+				ma->set_action(MoveAction::TURN_RIGHT_90);
+				ma->set_action(MoveAction::RETURN);
+				ma->set_action(MoveAction::TURN_LEFT_90);
+				ma->set_action(MoveAction::TURN_LEFT_90);
+				ma->set_action(MoveAction::RETURN);
+			}
 			ma->set_action(MoveAction::TURN_RIGHT_90);
 			ma->set_action(MoveAction::TURN_RIGHT_90);
 			ma->set_action(MoveAction::RETURN);
@@ -302,7 +298,7 @@ int main() {
 			rfl->enable();
 			while (1) {
 				Thread::wait(10);
-				if (rfl->flont(0) > 400 && rfl->flont(1) > 400) {
+				if (rfl->flont(0) > 1200 && rfl->flont(1) > 1200) {
 					bz->play(Buzzer::CONFIRM);
 					Thread::wait(200);
 					switch (mode) {
@@ -335,6 +331,32 @@ int main() {
 						ma->enable();
 						break;
 					case 2:
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
+						ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
+						ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
+						ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_135R);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+						for (int i = 0; i < 2; i++) {
+							ma->set_action(MoveAction::FAST_GO_HALF);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_135R);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_GO_HALF);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_45);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_135R);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+						}
 						ma->set_action(MoveAction::FAST_GO_HALF);
 						ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
 						ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
@@ -343,46 +365,48 @@ int main() {
 						ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
 						ma->set_action(MoveAction::FAST_TURN_LEFT_135R);
 						ma->set_action(MoveAction::FAST_TURN_LEFT_90);
-						for (int i = 0; i < 4; i++) {
-							ma->set_action(MoveAction::FAST_GO_HALF);
-							ma->set_action(MoveAction::FAST_TURN_LEFT_45);
-							ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
-							ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
-							ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
-							ma->set_action(MoveAction::FAST_TURN_LEFT_135R);
-							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
-						}
-						ma->set_action(MoveAction::FAST_GO_HALF);
-						ma->set_action(MoveAction::FAST_TURN_LEFT_45);
-						ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
-						ma->set_action(MoveAction::FAST_TURN_LEFT_45_45);
-						ma->set_action(MoveAction::FAST_TURN_RIGHT_45_45);
-						ma->set_action(MoveAction::FAST_TURN_LEFT_45R);
-						ma->set_action(MoveAction::FAST_GO_HALF);
 						mpu->calibration();
 						wd->calibration();
 						ma->enable();
 						break;
 					case 3:
-						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+						ma->set_action(MoveAction::FAST_GO_HALF);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+						ma->set_action(MoveAction::FAST_TURN_LEFT_90);
 						for (int i = 0; i < 4; i++) {
-							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
-							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
 							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
 							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
 						}
 						mpu->calibration();
 						wd->calibration();
 						ma->enable();
 						break;
 					case 4:
+						ma->set_action(MoveAction::FAST_GO_HALF);
 						ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 						for (int i = 0; i < 4; i++) {
 							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
@@ -400,6 +424,7 @@ int main() {
 						ma->enable();
 						break;
 					case 5:
+						ma->set_action(MoveAction::FAST_GO_HALF);
 						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
 						for (int i = 0; i < 4; i++) {
 							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
@@ -416,6 +441,32 @@ int main() {
 							ma->set_action(MoveAction::FAST_GO_HALF);
 							ma->set_action(MoveAction::FAST_TURN_RIGHT_180);
 							ma->set_action(MoveAction::FAST_GO_HALF);
+						}
+						mpu->calibration();
+						wd->calibration();
+						ma->enable();
+						break;
+					case 6:
+						ma->set_action(MoveAction::FAST_GO_HALF);
+						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+						for (int i = 0; i < 4; i++) {
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_GO_HALF);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_180);
+							ma->set_action(MoveAction::FAST_GO_HALF);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_LEFT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 						}
 						mpu->calibration();
 						wd->calibration();

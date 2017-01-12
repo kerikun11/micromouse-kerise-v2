@@ -12,6 +12,7 @@
 #include "config.h"
 #include <vector>
 #include <queue>
+#include <string>
 
 #define MOVE_ACTION_PERIOD			1000
 #define WALL_ATTACH_ENABLED			false
@@ -273,24 +274,25 @@ public:
 	enum ACTION {
 		START_STEP, START_INIT, GO_STRAIGHT, TURN_LEFT_90, TURN_RIGHT_90, RETURN, STOP,
 	};
-	enum FAST_ACTION {
-		FAST_GO_STRAIGHT,
-		FAST_GO_HALF,
-		FAST_GO_DIAGONAL,
-		FAST_TURN_LEFT_45,
-		FAST_TURN_RIGHT_45,
-		FAST_TURN_LEFT_45R,
-		FAST_TURN_RIGHT_45R,
-		FAST_TURN_LEFT_45_45,
-		FAST_TURN_RIGHT_45_45,
-		FAST_TURN_LEFT_90,
-		FAST_TURN_RIGHT_90,
-		FAST_TURN_LEFT_135,
-		FAST_TURN_RIGHT_135,
-		FAST_TURN_LEFT_135R,
-		FAST_TURN_RIGHT_135R,
-		FAST_TURN_LEFT_180,
-		FAST_TURN_RIGHT_180,
+	enum FAST_ACTION
+		:char {
+			FAST_GO_STRAIGHT = 's',
+		FAST_GO_HALF = 'x',
+		FAST_GO_DIAGONAL = 'w',
+		FAST_TURN_LEFT_45 = 'z',
+		FAST_TURN_RIGHT_45 = 'c',
+		FAST_TURN_LEFT_45R = 'Z',
+		FAST_TURN_RIGHT_45R = 'C',
+		FAST_TURN_LEFT_45_45 = 'q',
+		FAST_TURN_RIGHT_45_45 = 'e',
+		FAST_TURN_LEFT_90 = 'L',
+		FAST_TURN_RIGHT_90 = 'R',
+		FAST_TURN_LEFT_135 = 'a',
+		FAST_TURN_RIGHT_135 = 'd',
+		FAST_TURN_LEFT_135R = 'A',
+		FAST_TURN_RIGHT_135R = 'D',
+		FAST_TURN_LEFT_180 = 'Q',
+		FAST_TURN_RIGHT_180 = 'E',
 	};
 	struct Operation {
 		enum ACTION action;
@@ -302,7 +304,8 @@ public:
 				{ "start_step", "start_init", "go_straight", "turn_left_90", "turn_right_90", "return", "stop", };
 		return name[action];
 	}
-	void enable() {
+	void enable(bool opt = true) {
+		this->opt = opt;
 		rfl->enable();
 		sc->enable();
 		if (path.size() > 0) {
@@ -320,10 +323,11 @@ public:
 		}
 		path.clear();
 	}
-	void set_action(FAST_ACTION action) {
-		path.push_back(action);
+	void set_action(FAST_ACTION action, const int num = 1) {
+		for (int i = 0; i < num; i++)
+			path += action;
 	}
-	void set_action(std::vector<FAST_ACTION> actions) {
+	void set_action(string actions) {
 		path = actions;
 	}
 	void set_action(enum ACTION action, int num = 1) {
@@ -356,7 +360,7 @@ public:
 	void updateOrigin(Position passed) {
 		origin += passed.rotate(origin.theta);
 	}
-	void setPosition(Position pos = Position(90, 6 + 24, M_PI / 2)) {
+	void setPosition(Position pos = Position(90, WALL_THICKNESS / 2 + MACHINE_TAIL_LENGTH, M_PI / 2)) {
 		origin = pos;
 		sc->getPosition() = pos;
 	}
@@ -377,7 +381,8 @@ private:
 	float fast_speed;
 	Position origin;
 	std::queue<struct Operation> q;
-	std::vector<FAST_ACTION> path;
+	string path;
+	bool opt;
 
 	void isr() {
 		thread.signal_set(0x01);
@@ -516,7 +521,7 @@ private:
 			switch (action) {
 			case START_STEP:
 				setPosition();
-				straight_x(180 - 24 - 6, velocity, velocity);
+				straight_x(180 - MACHINE_TAIL_LENGTH - WALL_THICKNESS / 2, velocity, velocity);
 				break;
 			case START_INIT:
 				straight_x(90, velocity, 0);
@@ -533,8 +538,10 @@ private:
 				mt->drive(-60, -60);
 				Thread::wait(400);
 				mt->drive(0, 0);
-				disable();
-				break;
+				while (q.size()) {
+					q.pop();
+				}
+				return;
 			case GO_STRAIGHT:
 				straight_x(180 * num, velocity, velocity);
 				break;
@@ -575,12 +582,60 @@ private:
 			printPosition("End");
 		}
 	}
+	void replace(string &src, const string from, const string to) {
+		string::size_type pos = 0;
+		while (pos = src.find(from, pos), pos != string::npos) {
+			src.replace(pos, from.length(), to);
+//			pos += to.length();
+		}
+	}
 	void fastRun() {
+		printf("Path: %s\n", path.c_str());
+		if (path[0] != 'x' && path[0] != 'a' && path[0] != 'd') {
+			path = "x" + path + "x";
+		}
+		if (opt) {
+			replace(path, "s", "xx");
+			replace(path, "L", "ll");
+			replace(path, "R", "rr");
+
+			replace(path, "rllllr", "rlqlr");
+			replace(path, "lrrrrl", "lrerl");
+
+			replace(path, "xllr", "zlr");
+			replace(path, "xrrl", "crl");
+			replace(path, "lrrx", "lrC");
+			replace(path, "rllx", "rlZ");
+
+			replace(path, "xllllr", "xalr");
+			replace(path, "xrrrrl", "xdrl");
+			replace(path, "rllllx", "rlAx");
+			replace(path, "lrrrrx", "lrDx");
+
+			replace(path, "lllllr", "lalr");
+			replace(path, "rrrrrl", "rdrl");
+			replace(path, "rlllll", "rlAl");
+			replace(path, "lrrrrr", "lrDr");
+
+			replace(path, "xllllx", "Q");
+			replace(path, "xrrrrx", "E");
+
+			replace(path, "rllr", "rlwlr");
+			replace(path, "lrrl", "lrwrl");
+
+			replace(path, "rl", "");
+			replace(path, "lr", "");
+			replace(path, "rr", "R");
+			replace(path, "ll", "L");
+			replace(path, "r", "");
+			replace(path, "l", "");
+			printf("Path: %s\n", path.c_str());
+		}
 		const float velocity = 600;
-		const float v_max = 1800;
-		const float curve_gain = 0.6f;
+		const float v_max = 900;
+		const float curve_gain = 0.5f;
 		setPosition();
-		straight_x(180 - 24 - 6, velocity, velocity);
+		straight_x(90 - MACHINE_TAIL_LENGTH - WALL_THICKNESS / 2, velocity, velocity);
 		printPosition("S");
 		int path_index = 0;
 		float straight = 0.0f;
@@ -595,7 +650,7 @@ private:
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
-				straight += 26.361385736829078;
+				straight += 37.283280393151763;
 			}
 				break;
 			case FAST_TURN_RIGHT_45: {
@@ -605,11 +660,11 @@ private:
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
-				straight += 26.361385736829078;
+				straight += 37.283280393151763;
 			}
 				break;
 			case FAST_TURN_LEFT_45R: {
-				straight += 26.361385736829078;
+				straight += 37.283280393151763;
 				C45 tr(false);
 				if (straight > 1.0f) {
 					straight_x(straight, v_max, tr.velocity * curve_gain);
@@ -619,7 +674,7 @@ private:
 			}
 				break;
 			case FAST_TURN_RIGHT_45R: {
-				straight += 26.361385736829078;
+				straight += 37.283280393151763;
 				C45 tr(true);
 				if (straight > 1.0f) {
 					straight_x(straight, v_max, tr.velocity * curve_gain);
@@ -671,7 +726,7 @@ private:
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
-				straight += 74.560731431502333;
+				straight += 74.566906831688300;
 			}
 				break;
 			case FAST_TURN_RIGHT_135: {
@@ -681,11 +736,11 @@ private:
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
-				straight += 74.560731431502333;
+				straight += 74.566906831688300;
 			}
 				break;
 			case FAST_TURN_LEFT_135R: {
-				straight += 74.560731431502333;
+				straight += 74.566906831688300;
 				C135 tr(false);
 				if (straight > 1.0f) {
 					straight_x(straight, v_max, tr.velocity * curve_gain);
@@ -695,7 +750,7 @@ private:
 			}
 				break;
 			case FAST_TURN_RIGHT_135R: {
-				straight += 74.560731431502333;
+				straight += 74.566906831688300;
 				C135 tr(true);
 				if (straight > 1.0f) {
 					straight_x(straight, v_max, tr.velocity * curve_gain);
@@ -729,14 +784,14 @@ private:
 				straight += 90;
 				break;
 			case FAST_GO_DIAGONAL:
-				straight += 63.639610306789280;
+				straight += 127.2792206135786;
 				break;
 			}
 			path_index++;
 		}
 
 		printPosition("E");
-		straight += 90;
+//		straight += 90;
 		if (straight > 1.0f) {
 			straight_x(straight, v_max, velocity);
 			straight = 0;

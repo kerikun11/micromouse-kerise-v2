@@ -30,8 +30,7 @@ public:
 		return overflow_count * 65536 + getRawCount();
 	}
 	float position() {
-		return value() * WHEEL_DIAMETER_MM * M_PI * WHEEL_GEER_RATIO
-				/ ENCODER_PULSES;
+		return value() * WHEEL_DIAMETER_MM * M_PI * WHEEL_GEER_RATIO / ENCODER_PULSES * 2;
 	}
 private:
 	TIM_Encoder_InitTypeDef encoder;

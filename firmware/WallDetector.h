@@ -37,11 +37,11 @@ public:
 		}
 		for (int i = 0; i < 2; i++) {
 			_wall_distance.side[i] /= ave_cnt;
-			_wall_ref.side[i] = _wall_distance.side[i] / 3;
+			_wall_ref.side[i] = _wall_distance.side[i] / 2;
 		}
 		for (int i = 0; i < 2; i++) {
 			_wall_distance.flont[i] = WALL_DETECTOR_FLONT_RATIO * (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
-			_wall_ref.flont[i] = _wall_distance.flont[i] / 6; // KERISEv1: 5 KERISEv2: 9
+			_wall_ref.flont[i] = _wall_distance.flont[i] / 2; // KERISEv1: 5 KERISEv2: 9
 		}
 		printf("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],
 				(int) _wall_distance.flont[0], (int) _wall_distance.flont[1], (int) _wall_distance.side[1]);

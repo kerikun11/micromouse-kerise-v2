@@ -251,97 +251,91 @@ private:
 		agent.calcRunSequence(false);
 	}
 	void fast_run() {
-//		const OperationList &runSequence = agent.getRunSequence();
-//		printf("runSequence.size() => %d\n", runSequence.size());
-//		bz->play(Buzzer::CONFIRM);
-//
-//		dir = NORTH;
-//		pos = IndexVec(0, 0);
-//
-//		ma->set_action(MoveAction::FAST_START_STEP);
-//		for (size_t i = 0; i < runSequence.size(); i++) {
-//			printf("runSequence[%d].n => %d, runSequence[%d].op => %d\n", i, runSequence[i].n, i,
-//			runSequence[i].op);
-//			const Operation& op = runSequence[i];
-//			if (i == 0) {
-//				ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n - 1);
-//			} else {
-//				switch (op.op) {
-//					case Operation::FORWARD:
-//					ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n);
-//					break;
-//					case Operation::FORWARD_DIAG:
-////						ma->set_action(MoveAction::FAST_GO_DIAGONAL);
-//					break;
-//					case Operation::TURN_LEFT90:
-//					ma->set_action(MoveAction::FAST_TURN_LEFT_90, op.n);
-//					break;
-//					case Operation::TURN_LEFT45:
-////						ma->set_action(MoveAction::FAST_TURN_LEFT_45);
-//					break;
-//					case Operation::TURN_RIGHT90:
-//					ma->set_action(MoveAction::FAST_TURN_RIGHT_90, op.n);
-//					break;
-//					case Operation::TURN_RIGHT45:
-////						ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
-//					break;
-//					case Operation::STOP:
-//					ma->set_action(MoveAction::FAST_STOP);
-//					break;
-//				}
-//			}
-//			Thread::wait(1);
-//		}
-////		ma->set_action(MoveAction::FAST_STOP);
-//
-//		// start drive
-////		mpu->calibration();
-////		wd->calibration();
-//		ma->enable();
-//		while (ma->actions()) {
-//			Thread::wait(1);
-//		}
-//		bz->play(Buzzer::COMPLETE);
-//		// end drive
-//
-//		// back to start
+		const OperationList &runSequence = agent.getRunSequence();
+		printf("runSequence.size() => %d\n", runSequence.size());
+		bz->play(Buzzer::CONFIRM);
+
+		dir = NORTH;
+		pos = IndexVec(0, 0);
+
+		for (size_t i = 0; i < runSequence.size(); i++) {
+			printf("runSequence[%d].n => %d, runSequence[%d].op => %d\n", i, runSequence[i].n, i, runSequence[i].op);
+			const Operation& op = runSequence[i];
+			if (i == 0) {
+				ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n - 1);
+			} else {
+				switch (op.op) {
+				case Operation::FORWARD:
+					ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n);
+					break;
+				case Operation::FORWARD_DIAG:
+//						ma->set_action(MoveAction::FAST_GO_DIAGONAL);
+					break;
+				case Operation::TURN_LEFT90:
+					ma->set_action(MoveAction::FAST_TURN_LEFT_90, op.n);
+					break;
+				case Operation::TURN_LEFT45:
+//						ma->set_action(MoveAction::FAST_TURN_LEFT_45);
+					break;
+				case Operation::TURN_RIGHT90:
+					ma->set_action(MoveAction::FAST_TURN_RIGHT_90, op.n);
+					break;
+				case Operation::TURN_RIGHT45:
+//						ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
+					break;
+				case Operation::STOP:
+					break;
+				}
+			}
+			Thread::wait(1);
+		}
+
+		// start drive
+		mpu->calibration();
+//		wd->calibration();
+		ma->enable();
+		while (ma->actions()) {
+			Thread::wait(1);
+		}
+		bz->play(Buzzer::COMPLETE);
+		// end drive
+
+		// back to start
 //		printf("Back to Start\n");
 //		ma->set_action(MoveAction::RETURN);
 //		for (size_t i = 0; i < runSequence.size(); i++) {
-//			printf("runSequence[%d].n => %d, runSequence[%d].op => %d\n",
-//			runSequence.size() - i - 1, runSequence[runSequence.size() - 1 - i].n,
-//			runSequence.size() - 1 - i, runSequence[runSequence.size() - 1 - i].op);
+//			printf("runSequence[%d].n => %d, runSequence[%d].op => %d\n", runSequence.size() - i - 1,
+//					runSequence[runSequence.size() - 1 - i].n, runSequence.size() - 1 - i,
+//					runSequence[runSequence.size() - 1 - i].op);
 //			const Operation& op = runSequence[runSequence.size() - 1 - i];
 //			if (i == runSequence.size() - 1) {
 //				ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n - 1);
 //			} else {
 //				switch (op.op) {
-//					case Operation::FORWARD:
+//				case Operation::FORWARD:
 //					ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n);
 //					break;
-//					case Operation::FORWARD_DIAG:
+//				case Operation::FORWARD_DIAG:
 ////						ma->set_action(MoveAction::FAST_GO_DIAGONAL);
 //					break;
-//					case Operation::TURN_LEFT90:
+//				case Operation::TURN_LEFT90:
 //					ma->set_action(MoveAction::FAST_TURN_RIGHT_90, op.n);
 //					break;
-//					case Operation::TURN_LEFT45:
+//				case Operation::TURN_LEFT45:
 ////						ma->set_action(MoveAction::FAST_TURN_LEFT_45);
 //					break;
-//					case Operation::TURN_RIGHT90:
+//				case Operation::TURN_RIGHT90:
 //					ma->set_action(MoveAction::FAST_TURN_LEFT_90, op.n);
 //					break;
-//					case Operation::TURN_RIGHT45:
+//				case Operation::TURN_RIGHT45:
 ////						ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
 //					break;
-//					case Operation::STOP:
-//					ma->set_action(MoveAction::FAST_STOP);
-//					break;
+//			case Operation::STOP:
+//				break;
 //				}
 //			}
 //			Thread::wait(1);
 //		}
-////		ma->set_action(MoveAction::FAST_STOP);
 //
 //		ma->set_action(MoveAction::START_INIT);
 //		while (ma->actions()) {
@@ -354,13 +348,13 @@ private:
 	void task() {
 		search_run();
 		Thread::wait(1000);
-		while (1) {
-			fast_run();
-			Thread::wait(1000);
-			ma->set_params_relative(200);
-		}
+//		while (1) {
+		printf("Fast Run\n");
+		fast_run();
+		Thread::wait(1000);
+		ma->set_params_relative(200);
+//		}
 	}
-}
-;
+};
 
 #endif /* MAZESOLVER_H_ */
