@@ -55,11 +55,13 @@
 
 //#define WALL_DETECTOR_FLONT_RATIO	1.82f	/* KERISEv1 */
 #define WALL_DETECTOR_FLONT_RATIO	1.0f	/* KERISEv2 */
+#define WALL_SIDE_DIV				3		/*< Classic: 3, Half: 2 */
+#define WALL_FRONT_DIV				6		/*< Classic: 6, Half: 2 */
 
 #define MPU6500_UPDATE_PERIOD_US	1000
 
 /* Size */
-#define MACHINE_TAIL_LENGTH			(24*2)
+#define MACHINE_TAIL_LENGTH			(24*1)	/*< Classic: 1, Half: 2 */
 #define WALL_THICKNESS				12
 
 /* Pin Mapping */

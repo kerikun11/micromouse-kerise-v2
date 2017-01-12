@@ -141,7 +141,7 @@ public:
 			integral.wheel[i] = 0;
 			differential.wheel[i] = 0;
 		}
-		position.reset();
+//		position.reset();
 		ctrlTicker.attach_us(this, &SpeedController::ctrlIsr,
 		SPEED_CONTROLLER_PERIOD_US);
 	}

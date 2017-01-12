@@ -55,7 +55,9 @@ private:
 				pos.x++;
 				dir = EAST;
 			} else if (nextDir == SOUTH) {
+				ma->set_action(MoveAction::STOP);
 				ma->set_action(MoveAction::RETURN);
+				ma->set_action(MoveAction::GO_HALF);
 				pos.y--;
 				dir = SOUTH;
 			} else if (nextDir == WEST) {
@@ -77,13 +79,17 @@ private:
 				pos.y--;
 				dir = SOUTH;
 			} else if (nextDir == WEST) {
+				ma->set_action(MoveAction::STOP);
 				ma->set_action(MoveAction::RETURN);
+				ma->set_action(MoveAction::GO_HALF);
 				pos.x--;
 				dir = WEST;
 			}
 		} else if (dir == SOUTH) {
 			if (nextDir == NORTH) {
+				ma->set_action(MoveAction::STOP);
 				ma->set_action(MoveAction::RETURN);
+				ma->set_action(MoveAction::GO_HALF);
 				pos.y++;
 				dir = NORTH;
 			} else if (nextDir == EAST) {
@@ -105,7 +111,9 @@ private:
 				pos.y++;
 				dir = NORTH;
 			} else if (nextDir == EAST) {
+				ma->set_action(MoveAction::STOP);
 				ma->set_action(MoveAction::RETURN);
+				ma->set_action(MoveAction::GO_HALF);
 				pos.x++;
 				dir = EAST;
 			} else if (nextDir == SOUTH) {
@@ -253,6 +261,12 @@ private:
 	void fast_run() {
 		const OperationList &runSequence = agent.getRunSequence();
 		printf("runSequence.size() => %d\n", runSequence.size());
+		if (runSequence.size() == 0) {
+			bz->play(Buzzer::ERROR);
+			while (1) {
+				Thread::wait(100);
+			}
+		}
 		bz->play(Buzzer::CONFIRM);
 
 		dir = NORTH;
@@ -268,21 +282,15 @@ private:
 				case Operation::FORWARD:
 					ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n);
 					break;
-				case Operation::FORWARD_DIAG:
-//						ma->set_action(MoveAction::FAST_GO_DIAGONAL);
-					break;
 				case Operation::TURN_LEFT90:
 					ma->set_action(MoveAction::FAST_TURN_LEFT_90, op.n);
-					break;
-				case Operation::TURN_LEFT45:
-//						ma->set_action(MoveAction::FAST_TURN_LEFT_45);
 					break;
 				case Operation::TURN_RIGHT90:
 					ma->set_action(MoveAction::FAST_TURN_RIGHT_90, op.n);
 					break;
+				case Operation::FORWARD_DIAG:
+				case Operation::TURN_LEFT45:
 				case Operation::TURN_RIGHT45:
-//						ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
-					break;
 				case Operation::STOP:
 					break;
 				}
@@ -292,7 +300,6 @@ private:
 
 		// start drive
 		mpu->calibration();
-//		wd->calibration();
 		ma->enable();
 		while (ma->actions()) {
 			Thread::wait(1);
@@ -301,59 +308,52 @@ private:
 		// end drive
 
 		// back to start
-//		printf("Back to Start\n");
-//		ma->set_action(MoveAction::RETURN);
-//		for (size_t i = 0; i < runSequence.size(); i++) {
-//			printf("runSequence[%d].n => %d, runSequence[%d].op => %d\n", runSequence.size() - i - 1,
-//					runSequence[runSequence.size() - 1 - i].n, runSequence.size() - 1 - i,
-//					runSequence[runSequence.size() - 1 - i].op);
-//			const Operation& op = runSequence[runSequence.size() - 1 - i];
-//			if (i == runSequence.size() - 1) {
-//				ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n - 1);
-//			} else {
-//				switch (op.op) {
-//				case Operation::FORWARD:
-//					ma->set_action(MoveAction::FAST_GO_STRAIGHT, op.n);
-//					break;
-//				case Operation::FORWARD_DIAG:
-////						ma->set_action(MoveAction::FAST_GO_DIAGONAL);
-//					break;
-//				case Operation::TURN_LEFT90:
-//					ma->set_action(MoveAction::FAST_TURN_RIGHT_90, op.n);
-//					break;
-//				case Operation::TURN_LEFT45:
-////						ma->set_action(MoveAction::FAST_TURN_LEFT_45);
-//					break;
-//				case Operation::TURN_RIGHT90:
-//					ma->set_action(MoveAction::FAST_TURN_LEFT_90, op.n);
-//					break;
-//				case Operation::TURN_RIGHT45:
-////						ma->set_action(MoveAction::FAST_TURN_RIGHT_45);
-//					break;
-//			case Operation::STOP:
-//				break;
-//				}
-//			}
-//			Thread::wait(1);
-//		}
-//
-//		ma->set_action(MoveAction::START_INIT);
-//		while (ma->actions()) {
-//			Thread::wait(1);
-//		}
-//
-//		ma->disable();
-//		bz->play(Buzzer::COMPLETE);
+		printf("Back to Start\n");
+		ma->set_action(MoveAction::RETURN);
+		ma->set_action(MoveAction::GO_HALF);
+		for (size_t i = 0; i < runSequence.size(); i++) {
+			const Operation& op = runSequence[runSequence.size() - 1 - i];
+			if (i == runSequence.size() - 1) {
+				ma->set_action(MoveAction::GO_STRAIGHT, op.n - 1);
+			} else {
+				switch (op.op) {
+				case Operation::FORWARD:
+					ma->set_action(MoveAction::GO_STRAIGHT, op.n);
+					break;
+				case Operation::TURN_LEFT90:
+					ma->set_action(MoveAction::TURN_RIGHT_90, op.n);
+					break;
+				case Operation::TURN_RIGHT90:
+					ma->set_action(MoveAction::TURN_LEFT_90, op.n);
+					break;
+				case Operation::TURN_LEFT45:
+				case Operation::TURN_RIGHT45:
+				case Operation::FORWARD_DIAG:
+				case Operation::STOP:
+					break;
+				}
+			}
+			Thread::wait(1);
+		}
+
+		ma->set_action(MoveAction::START_INIT);
+		ma->enable();
+		while (ma->actions()) {
+			Thread::wait(1);
+		}
+
+		ma->disable();
+		bz->play(Buzzer::COMPLETE);
 	}
 	void task() {
 		search_run();
 		Thread::wait(1000);
-//		while (1) {
-		printf("Fast Run\n");
-		fast_run();
-		Thread::wait(1000);
-		ma->set_params_relative(200);
-//		}
+		while (1) {
+			printf("Fast Run\n");
+			fast_run();
+			Thread::wait(1000);
+			ma->set_params_relative(200);
+		}
 	}
 };
 

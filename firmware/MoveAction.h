@@ -272,7 +272,7 @@ public:
 		ticker.attach_us(this, &MoveAction::isr, MOVE_ACTION_PERIOD);
 	}
 	enum ACTION {
-		START_STEP, START_INIT, GO_STRAIGHT, TURN_LEFT_90, TURN_RIGHT_90, RETURN, STOP,
+		START_STEP, START_INIT, GO_STRAIGHT, GO_HALF, TURN_LEFT_90, TURN_RIGHT_90, RETURN, STOP,
 	};
 	enum FAST_ACTION
 		:char {
@@ -301,7 +301,7 @@ public:
 	const char*
 	action_string(enum ACTION action) {
 		static const char name[][32] =
-				{ "start_step", "start_init", "go_straight", "turn_left_90", "turn_right_90", "return", "stop", };
+				{ "start_step", "start_init", "go_straight", "go_half", "turn_left_90", "turn_right_90", "return", "stop", };
 		return name[action];
 	}
 	void enable(bool opt = true) {
@@ -343,7 +343,7 @@ public:
 		this->fast_speed += add;
 	}
 	int actions() const {
-		return q.size();
+		return q.size() + path.size();
 	}
 	void printPosition(const char* name) {
 		printf("%s\t", name);
@@ -502,16 +502,16 @@ private:
 		const float velocity = 600;
 		const float omega = 4 * M_PI;
 		while (1) {
-			float integral = 0;
+//			float integral = 0;
 			while (q.empty()) {
 				Thread::signal_wait(0x01);
-				Position cur = getRelativePosition();
-				int look_ahead = 30;
-				Position dir = (Position(cur.x + look_ahead) - cur).rotate(-cur.theta);
-				dir.theta = atan2f(dir.y, dir.x);
-				dir *= velocity / look_ahead;
-				integral += dir.theta * TRAJECTORY_INT_GAIN * MOVE_ACTION_PERIOD / 1000000;
-				sc->set_target(dir.x, (dir.theta + integral) * TRAJECTORY_PROP_GAIN);
+//				Position cur = getRelativePosition();
+//				int look_ahead = 30;
+//				Position dir = (Position(cur.x + look_ahead) - cur).rotate(-cur.theta);
+//				dir.theta = atan2f(dir.y, dir.x);
+//				dir *= velocity / look_ahead;
+//				integral += dir.theta * TRAJECTORY_INT_GAIN * MOVE_ACTION_PERIOD / 1000000;
+//				sc->set_target(dir.x, (dir.theta + integral) * TRAJECTORY_PROP_GAIN);
 			}
 			struct Operation operation = q.front();
 			enum ACTION action = operation.action;
@@ -545,6 +545,9 @@ private:
 			case GO_STRAIGHT:
 				straight_x(180 * num, velocity, velocity);
 				break;
+			case GO_HALF:
+				straight_x(90 * num, velocity, velocity);
+				break;
 			case TURN_LEFT_90:
 				for (int i = 0; i < num; i++) {
 					Curve90 tr(false);
@@ -558,7 +561,6 @@ private:
 				}
 				break;
 			case RETURN:
-				straight_x(90, velocity, 0);
 				if (mpu->angle.z > 0) {
 					wall_attach();
 					turn(-M_PI / 2, omega);
@@ -570,12 +572,10 @@ private:
 					wall_attach();
 					turn(M_PI / 2, omega);
 				}
-				straight_x(90, velocity, velocity);
 				break;
 			case STOP:
 				straight_x(90, velocity, 0);
 				wall_attach();
-				disable();
 				break;
 			}
 			q.pop();
@@ -791,15 +791,16 @@ private:
 		}
 
 		printPosition("E");
-//		straight += 90;
 		if (straight > 1.0f) {
-			straight_x(straight, v_max, velocity);
+			straight_x(straight, v_max, 0);
 			straight = 0;
 		}
 		wall_attach();
 		sc->set_target(0, 0);
 		Thread::wait(100);
-		disable();
+		sc->disable();
+		rfl->disable();
+		path.clear();
 	}
 };
 

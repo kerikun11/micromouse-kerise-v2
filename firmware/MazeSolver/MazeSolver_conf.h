@@ -23,21 +23,21 @@
 
 //経路のコストを計算するときに使うロボットの走行性能
 //90度曲がるブロックを進むのにかかる時間[s]
-#define TURN90_TIME 	0.6
+#define TURN90_TIME 	0.15
 
 //45度曲がるブロックを進むのにかかる時間[s]
-#define TURN45_TIME 	0.4
+#define TURN45_TIME 	0.1
 
 //加速度[m/s^2]
 #define ACCELERATION 	6.0
 
 //最大速度[m/s]
-#define MAX_VELOCITY 	1.0
+#define MAX_VELOCITY 	2.0
 
 //最小速度[m/s]
-#define MIN_VELOCITY 	0.2
+#define MIN_VELOCITY 	0.8
 
 //1区画の長さ[m]
-#define MAZE_1BLOCK_LENGTH 	0.18
+#define MAZE_1BLOCK_LENGTH 	0.09
 
 #endif /* MAZESOLVER_CONF_H_ */
