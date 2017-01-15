@@ -14,7 +14,7 @@ angle = pi/2;
 v_const = 2766.8;
 angle = pi/2;
 %}
-%%{
+%{
 % curve90 (fast)
 v_const = 978.16;
 angle = pi/2;
