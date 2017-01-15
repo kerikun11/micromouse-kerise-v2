@@ -14,12 +14,12 @@ angle = pi/2;
 v_const = 2766.8;
 angle = pi/2;
 %}
-%{
+%%{
 % curve90 (fast)
 v_const = 978.16;
 angle = pi/2;
 %}
-%%{
+%{
 % curve135 (fast)
 v_const = 1056.21;
 angle = pi*3/4;
@@ -30,7 +30,7 @@ v_const = 1623.31;
 angle = pi;
 %}
 
-omega_dot = 128* pi;
+omega_dot = 72 * pi;
 omega_max = 6 * pi;
 
 dt = 1/v_const/100;

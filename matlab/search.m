@@ -1,4 +1,10 @@
 clear;
+%%{
+% curve90 half (search)
+v_const = 300;
+pos_start = [0; 0; 0];
+pos_end = [45; 45; pi/2];
+%}
 %{
 % curve90 (search)
 v_const = 600;
