@@ -1,24 +1,28 @@
-clear;
-side_length = 90;
-%{
-% 45
-pos_end = [side_length, side_length/2, pi/4];
+clear
+segment = 90;
+%%{
+% 60
+pos_end = [segment/2, segment/2, pi/3];
 %}
 %{
 % 4545
-pos_end = [side_length/2*sqrt(2), side_length/2*sqrt(2), pi/2];
+pos_end = [segment/2*sqrt(2)-10/sqrt(2), segment/2*sqrt(2)-10/sqrt(2), pi/2];
+%}
+%{
+% 45S45
+pos_end = [segment/2*3*sqrt(2), segment/2*sqrt(2), pi/2];
 %}
 %{
 % 90
-pos_end = [side_length/2, side_length/2, pi/2];
+pos_end = [segment/2, segment/2, pi/2];
 %}
 %{
 % 135
-pos_end = [0, side_length, pi/4*3];
+pos_end = [0, segment, pi/4*3];
 %}
-%%{
+%{
 % 180
-pos_end = [0, side_length, pi];
+pos_end = [0, segment, pi];
 %}
 
 omega_dot = 144 * pi;
@@ -55,14 +59,10 @@ else % sine only
     y_end(v) = int(v*sin(theta), t, 0, T);
 end
 
-if pos_end(3) == pi/2
-    v = solve(x_end == pos_end(1), v);
-else
-    v = solve((pos_end(2)-y_end)*cos(angle)==(pos_end(1)-x_end)*sin(angle), v);
-end
+v = solve((pos_end(2)-y_end)*cos(angle)==(pos_end(1)-x_end)*sin(angle), v);
 
 format long;
-dt = double(10/v);
+dt = double(2/v);
 v = double(v);
 
 if(T2) > 0

@@ -6,7 +6,7 @@ angle = pi/4;
 %}
 %{
 % curve45_45 (fast)
-v_const = 1306.491;
+v_const = 1383.38;
 angle = pi/2;
 %}
 %{
@@ -30,7 +30,7 @@ v_const = 1623.31;
 angle = pi;
 %}
 
-omega_dot = 72 * pi;
+omega_dot = 128 * pi;
 omega_max = 6 * pi;
 
 dt = 1/v_const/100;
