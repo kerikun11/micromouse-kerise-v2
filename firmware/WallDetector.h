@@ -12,8 +12,6 @@
 #include "config.h"
 #include "Reflector.h"
 
-#define WALL_UPDATE_PERIOD_US		1000
-
 class WallDetector {
 public:
 	WallDetector(Reflector *rfl) :

@@ -11,11 +11,6 @@
 #include "mbed.h"
 #include "config.h"
 
-#define ENCODER_L_TIMx	TIM3
-#define ENCODER_R_TIMx	TIM4
-
-#define ENCODER_UPDATE_PERIOD_US	1000
-
 class Encoder {
 public:
 	Encoder(TIM_TypeDef *TIMx) :

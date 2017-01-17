@@ -11,8 +11,6 @@
 #include "mbed.h"
 #include "config.h"
 
-#define SPEED_CONTROLLER_PERIOD_US	1000
-
 class Position {
 public:
 	Position(const float x = 0, const float y = 0, const float theta = 0) :
@@ -161,9 +159,9 @@ public:
 	WheelParameter actual;
 	WheelParameter integral;
 	WheelParameter differential;
-	const float Kp = 1.80f;
-	const float Ki = 24.0f;
-	const float Kd = 0.001f;
+	const float Kp = SPEED_CONTROLLER_KP;
+	const float Ki = SPEED_CONTROLLER_KI;
+	const float Kd = SPEED_CONTROLLER_KD;
 private:
 	Motor *mt;
 	Encoders *enc;

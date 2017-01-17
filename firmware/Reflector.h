@@ -11,13 +11,6 @@
 #include "mbed.h"
 #include "config.h"
 
-#define IR_LED_PERIOD_US				500
-#define IR_LED_DUTY_US					25
-
-#define IR_RECEIVER_SAMPLE_SIZE			25
-#define IR_RECEIVER_SAMPLING_PERIOD_US	20
-#define IR_RECEIVER_UPDATE_PERIOD_US	1000
-
 class Reflector {
 public:
 	Reflector(PinName led_sl_fr_pin, PinName led_sr_fl_pin) :

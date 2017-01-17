@@ -11,8 +11,6 @@
 #include "mbed.h"
 #include "config.h"
 
-#define MOTOR_PERIOD_VALUE				(1000 - 1)
-
 class Motor {
 public:
 	Motor() {

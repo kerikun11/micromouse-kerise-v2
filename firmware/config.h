@@ -44,51 +44,93 @@
 #define STACK_SIZE_SERIAL_CTRL		2048
 #define STACK_SIZE_EMERGENCY		512
 
+/* Maze Size */
+#define HALF_SIZE					true
+
+#if HALF_SIZE
+#define SEGMENT_WIDTH				90
+#define WALL_THICKNESS				6
+#else
+#define SEGMENT_WIDTH				180
+#define WALL_THICKNESS				12
+#endif
+
 /* Hardware Parameter */
 
-#define MACHINE_ROTATION_RADIUS		21.6f	// [mm]
-#define WHEEL_DIAMETER_MM			24.65f
+#define MACHINE_TAIL_LENGTH			24.0f
+#define MACHINE_ROTATION_RADIUS		21.5f
+#define WHEEL_DIAMETER_MM			24.5f
 #define WHEEL_GEER_RATIO			0.25f
 #define ENCODER_PULSES				(1024*4)
 
 /* Calibration Parameter */
 
-//#define WALL_DETECTOR_FLONT_RATIO	1.82f	/* KERISEv1 */
-#define WALL_DETECTOR_FLONT_RATIO	1.0f	/* KERISEv2 */
-#define WALL_SIDE_DIV				3		/*< Classic: 3, Half: 2 */
-#define WALL_FRONT_DIV				6		/*< Classic: 6, Half: 2 */
+#if HALF_SIZE
+
+#define SPEED_CONTROLLER_KP			1.6f
+#define SPEED_CONTROLLER_KI			24.0f
+#define SPEED_CONTROLLER_KD			0.001f
+
+#define WALL_DETECTOR_FLONT_RATIO	1.0f
+#define WALL_SIDE_DIV				4
+#define WALL_FRONT_DIV				9
+
+#else
+
+#define SPEED_CONTROLLER_KP			1.8f
+#define SPEED_CONTROLLER_KI			24.0f
+#define SPEED_CONTROLLER_KD			0.001f
+
+#define WALL_DETECTOR_FLONT_RATIO	1.0f
+#define WALL_SIDE_DIV				3
+#define WALL_FRONT_DIV				6
+
+#endif
+
+/* Update/Sampling Period [us] */
 
 #define MPU6500_UPDATE_PERIOD_US	1000
 
-/* Size */
-#define MACHINE_TAIL_LENGTH			(24*1)	/*< Classic: 1, Half: 2 */
-#define WALL_THICKNESS				12
+#define ENCODER_UPDATE_PERIOD_US	1000
+
+#define IR_LED_PERIOD_US				200
+#define IR_LED_DUTY_US					100
+#define IR_RECEIVER_SAMPLE_SIZE			25
+#define IR_RECEIVER_SAMPLING_PERIOD_US	20
+#define IR_RECEIVER_UPDATE_PERIOD_US	1000
+
+#define WALL_UPDATE_PERIOD_US		1000
+
+#define SPEED_CONTROLLER_PERIOD_US	1000
+
+#define MOVE_ACTION_PERIOD			1000
 
 /* Pin Mapping */
 
-#define BATTERY_PIN			PB_1
+#define BATTERY_PIN					PB_1
 
-#define BUZZER_PIN			PB_9	//< Modify PeripheralPins.c PWM Pin using Timer11
+#define BUZZER_PIN					PB_9	//< Modify PeripheralPins.c PWM Pin using Timer11
 
-#define BUTTON_PIN			PB_0
+#define BUTTON_PIN					PB_0
 
-#define LED1_PIN			PC_5
-#define LED2_PIN			PC_6
-#define LED3_PIN			PC_7
-#define LED4_PIN			PC_8
-#define LED5_PIN			PC_9
-#define LED6_PIN			PC_10
-#define LED7_PIN			PC_11
-#define LED8_PIN			PC_12
+#define LED1_PIN					PC_5
+#define LED2_PIN					PC_6
+#define LED3_PIN					PC_7
+#define LED4_PIN					PC_8
+#define LED5_PIN					PC_9
+#define LED6_PIN					PC_10
+#define LED7_PIN					PC_11
+#define LED8_PIN					PC_12
 
-#define MPU6500_MOSI_PIN	PA_7
-#define MPU6500_MISO_PIN	PA_6
-#define MPU6500_SCLK_PIN	PA_5
-#define MPU6500_SSEL_PIN	PA_4
+#define MPU6500_MOSI_PIN			PA_7
+#define MPU6500_MISO_PIN			PA_6
+#define MPU6500_SCLK_PIN			PA_5
+#define MPU6500_SSEL_PIN			PA_4
 
-#define IR_LED_SL_FR_PIN	PB_14
-#define IR_LED_SR_FL_PIN	PB_15
+#define IR_LED_SL_FR_PIN			PB_14
+#define IR_LED_SR_FL_PIN			PB_15
 
+/* Motor */
 #define MOTOR_TIMx						TIM2
 #define MOTOR_TIMx_CLK_ENABLE()			__HAL_RCC_TIM2_CLK_ENABLE()
 #define MOTOR_TIMx_CHANNEL_GPIO_PORT()	do{__HAL_RCC_GPIOA_CLK_ENABLE();__HAL_RCC_GPIOB_CLK_ENABLE();}while(0)
@@ -101,6 +143,11 @@
 #define MOTOR_TIMx_GPIO_PIN_CHANNEL3	GPIO_PIN_10
 #define MOTOR_TIMx_GPIO_PIN_CHANNEL4	GPIO_PIN_11
 #define MOTOR_TIMx_GPIO_AF_CHANNEL		GPIO_AF1_TIM2
+#define MOTOR_PERIOD_VALUE				(1000 - 1)
+
+/* Encoder */
+#define ENCODER_L_TIMx	TIM3
+#define ENCODER_R_TIMx	TIM4
 
 /* Definition for ADCx clock resources */
 #define ADCx_S							ADC2
@@ -131,15 +178,15 @@
  * TIM3		Encoder L
  * TIM4		Encoder R
  * TIM5		*
- * TIM6
- * TIM7
- * TIM8
- * TIM9
- * TIM10
- * TIM11
- * TIM12
- * TIM13
- * TIM14
+ * TIM6		*
+ * TIM7		*
+ * TIM8		*
+ * TIM9		*
+ * TIM10	*
+ * TIM11	Buzzer
+ * TIM12	*
+ * TIM13	*
+ * TIM14	*
  */
 
 /*

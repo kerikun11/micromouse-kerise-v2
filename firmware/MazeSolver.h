@@ -206,6 +206,7 @@ private:
 
 		mpu->calibration();
 		wd->calibration();
+		bz->play(Buzzer::CONFIRM);
 		ma->enable();
 		while (1) {
 			while (ma->actions()) {
@@ -268,6 +269,7 @@ private:
 			}
 		}
 		bz->play(Buzzer::CONFIRM);
+		Thread::wait(500);
 
 		dir = NORTH;
 		pos = IndexVec(0, 0);
@@ -347,11 +349,11 @@ private:
 	}
 	void task() {
 		search_run();
-		Thread::wait(1000);
+		Thread::wait(3000);
 		while (1) {
 			printf("Fast Run\n");
 			fast_run();
-			Thread::wait(1000);
+			Thread::wait(3000);
 			ma->set_params_relative(200);
 		}
 	}
