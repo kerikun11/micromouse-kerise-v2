@@ -1,5 +1,9 @@
-clear
+%clear
 segment = 90;
+%{
+% search 90
+pos_end = [segment/2-20, segment/2-20, pi/2];
+%}
 %{
 % 30
 pos_end = [segment/2*(sqrt(3)+1)/2, segment/2*(sqrt(3)-1)/2, pi/6];
@@ -18,7 +22,7 @@ pos_end = [segment/2, segment/2*sqrt(3), pi*2/3];
 %}
 %%{
 % 150
-pos_end = [0, segment, pi/6*5];
+pos_end = [segment*2/3, segment, pi/6*5];
 %}
 %{
 % 180

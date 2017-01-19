@@ -19,9 +19,9 @@ pos_end = [45; 45; pi/3];
 %}
 %%{
 % curve150 half (search)
-v_const = 500;
+v_const = 600;
 pos_start = [0; 0; 0];
-pos_end = [0; 90; pi/6*5];
+pos_end = [45; 90; pi/6*5];
 %}
 %{
 % curve half (search)
