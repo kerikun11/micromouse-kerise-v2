@@ -15,11 +15,11 @@
 #include <string>
 
 #define WALL_ATTACH_ENABLED			false
-#define WALL_AVOID_ENABLED			true
+#define WALL_AVOID_ENABLED			false
 
 #if HALF_SIZE
-#define LOOK_AHEAD_UNIT				3
-#define TRAJECTORY_PROP_GAIN		60
+#define LOOK_AHEAD_UNIT				2
+#define TRAJECTORY_PROP_GAIN		40
 #define TRAJECTORY_INT_GAIN			0
 #else
 #define LOOK_AHEAD_UNIT				6
@@ -277,7 +277,8 @@ public:
 	C180(bool mirror = false) :
 			Trajectory(), mirror(mirror) {
 	}
-	const float velocity = 818.9712226221780f;
+//	const float velocity = 818.9712226221780f;
+	const float velocity = 600.0f;
 	const float straight = 20.0f;
 private:
 	bool mirror;
@@ -538,14 +539,15 @@ public:
 				{ "start_step", "start_init", "go_straight", "go_half", "turn_left_90", "turn_right_90", "return", "stop", };
 		return name[action];
 	}
-	void enable(bool opt = true) {
-		this->opt = opt;
+	void enable(const float speed = 200) {
 		rfl->enable();
 		sc->enable();
 		if (path.size() > 0) {
 			thread.start(this, &MoveAction::fastRun);
+			this->fast_speed = speed;
 		} else {
 			thread.start(this, &MoveAction::searchRun);
+			this->search_speed = speed;
 		}
 	}
 	void disable() {
@@ -613,21 +615,22 @@ private:
 	Ticker ticker;
 	Timer timer;
 	float fast_speed;
+	float search_speed;
 	Position origin;
 	std::queue<struct Operation> q;
 	string path;
-	bool opt;
 
 	void isr() {
 		thread.signal_set(0x01);
 	}
 	void wall_avoid() {
 #if WALL_AVOID_ENABLED
+		const float gain = 0.0001f;
 		if (wd->wall().side[0]) {
-			fixPosition(Position(0, wd->wall_difference().side[0] * 0.0001 * sc->actual.trans, 0).rotate(origin.theta));
+			fixPosition(Position(0, wd->wall_difference().side[0] * gain * sc->actual.trans, 0).rotate(origin.theta));
 		}
 		if (wd->wall().side[1]) {
-			fixPosition(Position(0, -wd->wall_difference().side[1] * 0.0001 * sc->actual.trans, 0).rotate(origin.theta));
+			fixPosition(Position(0, -wd->wall_difference().side[1] * gain * sc->actual.trans, 0).rotate(origin.theta));
 		}
 #endif
 	}
@@ -695,13 +698,13 @@ private:
 		updateOrigin(Position(0, 0, angle));
 	}
 	void straight_x(const float distance, const float v_max, const float v_end) {
-		const float accel = 6000;
+		const float accel = 9000;
 		const float decel = 3000;
 		Trajectory st;
 		timer.reset();
 		timer.start();
 		float v_start = sc->actual.trans;
-		bool isAccel = true;
+//		bool isAccel = true;
 		while (1) {
 			if (getRelativePosition().x > distance - 5.0f)
 				break;
@@ -709,15 +712,13 @@ private:
 				break;
 			Thread::signal_wait(0x01);
 			float extra = distance - getRelativePosition().x;
-			float velocity = sqrt(2 * decel * fabs(extra) + v_end * v_end);
-			if (extra < 0)
-				velocity = -velocity;
-			if (velocity < sc->actual.trans)
-				isAccel = false;
-			if (isAccel)
-				velocity = v_start + timer.read() * accel;
-			if (velocity > v_max)
-				velocity = v_max;
+			float velocity_a = v_start + timer.read() * accel;
+			float velocity_d = sqrt(2 * decel * fabs(extra) + v_end * v_end);
+			float velocity = v_max;
+			if (velocity > velocity_d)
+				velocity = velocity_d;
+			if (velocity > velocity_a)
+				velocity = velocity_a;
 			Position dir = st.getNextDir(getRelativePosition(), velocity);
 			sc->set_target(velocity, dir.theta * TRAJECTORY_PROP_GAIN);
 			wall_avoid();
@@ -838,40 +839,40 @@ private:
 		if (path[0] != 'x' && path[0] != 'c' && path[0] != 'z') {
 			path = "x" + path + "x";
 		}
+
 		printf("Path: %s\n", path.c_str());
-		if (opt) {
-			replace(path, "s", "xx");
-			replace(path, "L", "ll");
-			replace(path, "R", "rr");
+		replace(path, "s", "xx");
+		replace(path, "L", "ll");
+		replace(path, "R", "rr");
 
-			replace(path, "rllllr", "rlqlr");
-			replace(path, "lrrrrl", "lrerl");
+		replace(path, "rllllr", "rlqlr");
+		replace(path, "lrrrrl", "lrerl");
 
-			replace(path, "xllr", "zlr");
-			replace(path, "xrrl", "crl");
-			replace(path, "lrrx", "lrC");
-			replace(path, "rllx", "rlZ");
+		replace(path, "xllr", "zlr");
+		replace(path, "xrrl", "crl");
+		replace(path, "lrrx", "lrC");
+		replace(path, "rllx", "rlZ");
 
-			replace(path, "llllr", "alr");
-			replace(path, "rrrrl", "drl");
-			replace(path, "rllll", "rlA");
-			replace(path, "lrrrr", "lrD");
+		replace(path, "xllllr", "alr");
+		replace(path, "xrrrrl", "drl");
+		replace(path, "rllllx", "rlA");
+		replace(path, "lrrrrx", "lrD");
 
-			replace(path, "xllllx", "Q");
-			replace(path, "xrrrrx", "E");
+		replace(path, "xllllx", "Q");
+		replace(path, "xrrrrx", "E");
 
-			replace(path, "rllr", "rlwlr");
-			replace(path, "lrrl", "lrWrl");
+		replace(path, "rllr", "rlwlr");
+		replace(path, "lrrl", "lrWrl");
 
-			replace(path, "rl", "");
-			replace(path, "lr", "");
-			replace(path, "rr", "R");
-			replace(path, "ll", "L");
-			printf("Path: %s\n", path.c_str());
-		}
+		replace(path, "rl", "");
+		replace(path, "lr", "");
+		replace(path, "rr", "R");
+		replace(path, "ll", "L");
+		printf("Path: %s\n", path.c_str());
+
 #if HALF_SIZE
-		const float v_max = 300;
-		const float curve_gain = 0.5f;
+		const float v_max = 1200;
+		const float curve_gain = 0.6f;
 #else
 		const float v_max = 1200;
 		const float curve_gain = 0.5f;

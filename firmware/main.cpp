@@ -196,9 +196,7 @@ int main() {
 	mt = new Motor;
 
 	enc = new Encoders(ENCODER_L_TIMx, ENCODER_R_TIMx);
-	mpu = new MPU6500(MPU6500_MOSI_PIN, MPU6500_MISO_PIN,
-	MPU6500_SCLK_PIN,
-	MPU6500_SSEL_PIN);
+	mpu = new MPU6500(MPU6500_MOSI_PIN, MPU6500_MISO_PIN, MPU6500_SCLK_PIN, MPU6500_SSEL_PIN);
 
 	rfl = new Reflector(IR_LED_SL_FR_PIN, IR_LED_SR_FL_PIN);
 	wd = new WallDetector(rfl);

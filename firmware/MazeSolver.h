@@ -340,7 +340,7 @@ private:
 		}
 
 		ma->set_action(MoveAction::START_INIT);
-		ma->enable();
+		ma->enable(300);
 		while (ma->actions()) {
 			Thread::wait(1);
 		}
@@ -350,11 +350,11 @@ private:
 	}
 	void task() {
 		search_run();
-		Thread::wait(3000);
+		Thread::wait(2000);
 		while (1) {
 			printf("Fast Run\n");
 			fast_run();
-			Thread::wait(3000);
+			Thread::wait(2000);
 			ma->set_params_relative(200);
 		}
 	}
