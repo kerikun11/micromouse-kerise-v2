@@ -207,6 +207,7 @@ private:
 		mpu->calibration();
 		wd->calibration();
 		bz->play(Buzzer::CONFIRM);
+		Thread::wait(200);
 		ma->enable();
 		while (1) {
 			while (ma->actions()) {

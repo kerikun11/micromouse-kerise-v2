@@ -1,9 +1,27 @@
 clear;
-%%{
+%{
+% curve30 half (search)
+v_const = 300;
+pos_start = [0; 0; 0];
+pos_end = [45*(sqrt(3)+1)/2; 45*(sqrt(3)-1)/2; pi/6];
+%}
+%{
 % curve60 half (search)
 v_const = 300;
 pos_start = [0; 0; 0];
 pos_end = [45; 45; pi/3];
+%}
+%{
+% curve120 half (search)
+v_const = 300;
+pos_start = [0; 0; -pi/3];
+pos_end = [45; 45; pi/3];
+%}
+%%{
+% curve150 half (search)
+v_const = 500;
+pos_start = [0; 0; 0];
+pos_end = [0; 90; pi/6*5];
 %}
 %{
 % curve half (search)

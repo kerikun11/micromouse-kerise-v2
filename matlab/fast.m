@@ -1,24 +1,24 @@
 clear
 segment = 90;
-%%{
+%{
+% 30
+pos_end = [segment/2*(sqrt(3)+1)/2, segment/2*(sqrt(3)-1)/2, pi/6];
+%}
+%{
 % 60
-pos_end = [segment/2, segment/2, pi/3];
-%}
-%{
-% 4545
-pos_end = [segment/2*sqrt(2)-10/sqrt(2), segment/2*sqrt(2)-10/sqrt(2), pi/2];
-%}
-%{
-% 45S45
-pos_end = [segment/2*3*sqrt(2), segment/2*sqrt(2), pi/2];
+pos_end = [segment*2/3, segment/2, pi/3];
 %}
 %{
 % 90
 pos_end = [segment/2, segment/2, pi/2];
 %}
 %{
-% 135
-pos_end = [0, segment, pi/4*3];
+% 120
+pos_end = [segment/2, segment/2*sqrt(3), pi*2/3];
+%}
+%%{
+% 150
+pos_end = [0, segment, pi/6*5];
 %}
 %{
 % 180
@@ -121,6 +121,8 @@ else
 end
 
 dlmwrite('data.csv', pos, 'precision', '%.10f');
+v
+double((pos_end(2)-pos(end, 2))/sin(angle))
 
 subplot(6,1,1);
 title(sprintf('$$ \\dot{\\omega}_{max}: %.0f\\pi,\\ \\omega_{max}: %.0f\\pi $$', omega_dot/pi, omega_max/pi), 'Interpreter','latex', 'FontSize', 14);

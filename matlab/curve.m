@@ -1,5 +1,5 @@
 clear;
-%{
+%%{
 % curve45 (fast)
 v_const = 2089.04;
 angle = pi/4;
