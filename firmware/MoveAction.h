@@ -60,8 +60,6 @@ protected:
 	virtual Position position(int index) const {
 		return Position(index * interval, 0, 0);
 	}
-	virtual void cache(int index) {
-	}
 	int getSize() const {
 		return size();
 	}
@@ -74,7 +72,6 @@ protected:
 			Position dir = (target - pos).rotate(-target.theta);
 			if (dir.x > 0) {
 				last_index = i;
-				cache(last_index);
 				return last_index;
 			}
 		}
@@ -701,29 +698,33 @@ private:
 		updateOrigin(Position(0, 0, angle));
 	}
 	void straight_x(const float distance, const float v_max, const float v_end, bool avoid = true) {
-		const float accel = 3000;
+		const float accel = 6000;
 		const float decel = 3000;
-		Trajectory st;
 		timer.reset();
 		timer.start();
 		float v_start = sc->actual.trans;
-//		bool isAccel = true;
+		float T = 1.5f * (v_max - v_start) / accel;
 		while (1) {
-			if (getRelativePosition().x > distance - 5.0f)
+			Position cur = getRelativePosition();
+			if (cur.x > distance - 10.0f)
 				break;
 			if (v_end < 1.0f && sc->actual.trans < 1.0f)
 				break;
 			Thread::signal_wait(0x01);
-			float extra = distance - getRelativePosition().x;
-			float velocity_a = v_start + timer.read() * accel;
+			float extra = distance - cur.x;
+			float velocity_a = v_start
+					+ (v_max - v_start) * 6.0f
+							* (-1.0f / 3 * pow(timer.read() / T, 3) + 1.0f / 2 * pow(timer.read() / T, 2));
 			float velocity_d = sqrt(2 * decel * fabs(extra) + v_end * v_end);
 			float velocity = v_max;
 			if (velocity > velocity_d)
 				velocity = velocity_d;
-			if (velocity > velocity_a)
+			if (timer.read() < T && velocity > velocity_a)
 				velocity = velocity_a;
-			Position dir = st.getNextDir(getRelativePosition(), velocity);
-			sc->set_target(velocity, dir.theta * TRAJECTORY_PROP_GAIN);
+#define LOOK_AHEAD_UNIT_ST		10
+#define TRAJECTORY_PROP_GAIN_ST	40
+			float theta = atan2f(-cur.y, 10 + LOOK_AHEAD_UNIT_ST * pow(velocity / 1200, 2)) - cur.theta;
+			sc->set_target(velocity, TRAJECTORY_PROP_GAIN_ST * theta);
 			if (avoid)
 				wall_avoid();
 		}
@@ -754,8 +755,10 @@ private:
 		while (1) {
 			while (q.empty()) {
 				Thread::signal_wait(0x01);
-				sc->set_target(velocity, -getRelativePosition().y * 1);
-//				wall_avoid();
+				Position cur = getRelativePosition();
+				float theta = atan2f(-cur.y, 10 + LOOK_AHEAD_UNIT_ST * pow(velocity / 1200, 2)) - cur.theta;
+				sc->set_target(velocity, TRAJECTORY_PROP_GAIN_ST * theta);
+				wall_avoid();
 			}
 			struct Operation operation = q.front();
 			enum ACTION action = operation.action;
@@ -873,8 +876,8 @@ private:
 		printf("Path: %s\n", path.c_str());
 
 #if HALF_SIZE
-		const float v_max = 600;
-		const float curve_gain = 0.4f;
+		const float v_max = 2400;
+		const float curve_gain = 0.6f;
 #else
 		const float v_max = 1200;
 		const float curve_gain = 0.5f;

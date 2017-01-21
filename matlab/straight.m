@@ -1,8 +1,12 @@
 clear;
-syms t T a_max v_max v_0 x_cur v_cur 'real'
+syms t T a_max v_max v_0
 
-T = (v_max - v_0) / (4 * a_max);
-v(t) = v_0 + (v_max - v_0) * (-1/3*(t/T)^3+1/2*(t/T)^2);
+a_max = 6000;
+v_0 = 600;
+v_max = 1200;
+
+T = 1.5 * (v_max - v_0) / a_max;
+v(t) = v_0 + (v_max - v_0) * 6 * (-1/3*(t/T)^3+1/2*(t/T)^2);
 a(t) = diff(v, t);
 x(t) = int(v, t);
 

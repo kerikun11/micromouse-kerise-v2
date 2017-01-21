@@ -25,7 +25,7 @@ pos_end = [45; 90; pi/6*5];
 %}
 %%{
 % curve half (search)
-v_const = 260;
+v_const = 300;
 pos_start = [0; 0; 0];
 pos_end = [45; 45; pi/2];
 %}
