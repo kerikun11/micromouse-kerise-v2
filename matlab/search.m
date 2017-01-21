@@ -17,15 +17,15 @@ v_const = 300;
 pos_start = [0; 0; -pi/3];
 pos_end = [45; 45; pi/3];
 %}
-%%{
+%{
 % curve150 half (search)
 v_const = 600;
 pos_start = [0; 0; 0];
 pos_end = [45; 90; pi/6*5];
 %}
-%{
+%%{
 % curve half (search)
-v_const = 300;
+v_const = 260;
 pos_start = [0; 0; 0];
 pos_end = [45; 45; pi/2];
 %}

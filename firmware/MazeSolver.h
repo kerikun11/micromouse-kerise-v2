@@ -192,14 +192,15 @@ private:
 		return pos;
 	}
 	void search_run() {
-		if (agent.getState() == Agent::FINISHED || agent.getState() == Agent::BACK_TO_START)
-			return; //Agentの状態を確認 FINISHEDになったら計測走行にうつる
 		maze = maze_backup;
 		dir = NORTH;
 		pos = IndexVec(0, 0);
 		Direction wallData = 0xfe;		//< センサから取得した壁情報を入れる
 		IndexVec robotPos = pos;	//< ロボットの座標を取得
 		agent.update(robotPos, wallData);		//< 壁情報を更新 次に進むべき方向を計算
+
+		if (agent.getState() == Agent::FINISHED || agent.getState() == Agent::BACK_TO_START)
+			return; //Agentの状態を確認 FINISHEDになったら計測走行にうつる
 
 		ma->set_action(MoveAction::START_STEP);
 		pos = IndexVec(0, 1);
@@ -216,7 +217,7 @@ private:
 
 			Direction wallData = getWallData();		//< センサから取得した壁情報を入れる
 			IndexVec robotPos = getRobotPosion();	//< ロボットの座標を取得
-			printf("Position:\t(%d, %d)\tWall:\t%X\n", (int) robotPos.x, (int) robotPos.y, (int) wallData);
+			printf("Vec:\t(%d, %d)\tWall:\t%X\n", (int) robotPos.x, (int) robotPos.y, (int) wallData);
 
 			agent.update(robotPos, wallData);		//< 壁情報を更新 次に進むべき方向を計算
 			printf("State: %d\n", agent.getState());
@@ -226,11 +227,13 @@ private:
 			//ゴールにたどり着いた瞬間に一度だけmazeのバックアップをとる
 			//Mazeクラスはoperator=が定義してあるからa = bでコピーできる
 			if (prevState != Agent::SEARCHING_REACHED_GOAL && agent.getState() == Agent::SEARCHING_REACHED_GOAL) {
-				printf("maze_backup\n");
+				printf("maze_backup 1\n");
 				maze_backup = maze;
 				bz->play(Buzzer::CONFIRM);
 			}
 			if (prevState != Agent::BACK_TO_START && agent.getState() == Agent::BACK_TO_START) {
+				printf("maze_backup 2\n");
+				maze_backup = maze;
 				bz->play(Buzzer::COMPLETE);
 			}
 			prevState = agent.getState();
@@ -240,13 +243,13 @@ private:
 			if (nextDir == 0) {
 				bz->play(Buzzer::ERROR);
 				ma->set_action(MoveAction::STOP);
+				ma->disable();
 				while (1) {
 					Thread::wait(100);
 				}
 			}
 			robotMove(nextDir);  //< robotMove関数はDirection型を受け取ってロボットをそっちに動かす関数
 		}
-		maze_backup = maze;
 		ma->set_action(MoveAction::START_INIT);
 		while (ma->actions()) {
 			Thread::wait(1);
@@ -257,10 +260,11 @@ private:
 		maze.printWall();
 		Thread::wait(10);
 
-		printf("agent.calcRunSequence();\n");
-		agent.calcRunSequence(false);
+		maze_backup = maze;
 	}
 	void fast_run() {
+		printf("agent.calcRunSequence();\n");
+		agent.calcRunSequence(false);
 		const OperationList &runSequence = agent.getRunSequence();
 		printf("runSequence.size() => %d\n", runSequence.size());
 		if (runSequence.size() == 0) {

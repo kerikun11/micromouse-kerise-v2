@@ -15,12 +15,13 @@
 #include <string>
 
 #define WALL_ATTACH_ENABLED			false
-#define WALL_AVOID_ENABLED			true
+#define WALL_AVOID_ENABLED			false
 
 #if HALF_SIZE
-#define LOOK_AHEAD_UNIT				2
-#define TRAJECTORY_PROP_GAIN		40
+#define LOOK_AHEAD_UNIT				3
+#define TRAJECTORY_PROP_GAIN		80
 #define TRAJECTORY_INT_GAIN			0
+#define WALL_AVOID_GAIN				0.0001f
 #else
 #define LOOK_AHEAD_UNIT				6
 #define TRAJECTORY_PROP_GAIN		40
@@ -39,7 +40,7 @@ public:
 	}
 	Position getNextDir(const Position &cur, float velocity) {
 		int index_cur = getNextIndex(cur);
-		int look_ahead = LOOK_AHEAD_UNIT * (1.0f + pow(velocity / 300, 2));
+		int look_ahead = LOOK_AHEAD_UNIT * (1.0f + pow(velocity / 600, 2));
 		Position dir = (getPosition(index_cur + look_ahead) - cur).rotate(-cur.theta);
 		dir.theta = atan2f(dir.y, dir.x);
 		return dir;
@@ -88,7 +89,7 @@ public:
 	Curve90(bool mirror = false) :
 			Trajectory(), mirror(mirror) {
 	}
-	const float velocity = 285.7455500712380f;
+	const float velocity = 200.0f;
 	const float straight = 20.0f;
 private:
 	bool mirror;
@@ -627,7 +628,7 @@ private:
 	}
 	void wall_avoid() {
 #if WALL_AVOID_ENABLED
-		const float gain = 0.0001f;
+		const float gain = WALL_AVOID_GAIN;
 		if (wd->wall().side[0]) {
 			fixPosition(Position(0, wd->wall_difference().side[0] * gain * sc->actual.trans, 0).rotate(origin.theta));
 		}
@@ -699,8 +700,8 @@ private:
 		}
 		updateOrigin(Position(0, 0, angle));
 	}
-	void straight_x(const float distance, const float v_max, const float v_end) {
-		const float accel = 9000;
+	void straight_x(const float distance, const float v_max, const float v_end, bool avoid = true) {
+		const float accel = 3000;
 		const float decel = 3000;
 		Trajectory st;
 		timer.reset();
@@ -723,7 +724,8 @@ private:
 				velocity = velocity_a;
 			Position dir = st.getNextDir(getRelativePosition(), velocity);
 			sc->set_target(velocity, dir.theta * TRAJECTORY_PROP_GAIN);
-			wall_avoid();
+			if (avoid)
+				wall_avoid();
 		}
 		sc->set_target(v_end, 0);
 //		printPosition("Straight");
@@ -750,16 +752,10 @@ private:
 	void searchRun() {
 		const float velocity = 200;
 		while (1) {
-//			float integral = 0;
 			while (q.empty()) {
 				Thread::signal_wait(0x01);
-//				Position cur = getRelativePosition();
-//				int look_ahead = 30;
-//				Position dir = (Position(cur.x + look_ahead) - cur).rotate(-cur.theta);
-//				dir.theta = atan2f(dir.y, dir.x);
-//				dir *= velocity / look_ahead;
-//				integral += dir.theta * TRAJECTORY_INT_GAIN * MOVE_ACTION_PERIOD / 1000000;
-//				sc->set_target(dir.x, (dir.theta + integral) * TRAJECTORY_PROP_GAIN);
+				sc->set_target(velocity, -getRelativePosition().y * 1);
+//				wall_avoid();
 			}
 			struct Operation operation = q.front();
 			enum ACTION action = operation.action;
@@ -791,7 +787,7 @@ private:
 				}
 				return;
 			case GO_STRAIGHT:
-				straight_x(SEGMENT_WIDTH * num, velocity, velocity);
+				straight_x(SEGMENT_WIDTH * num, velocity * 2, velocity);
 				break;
 			case GO_HALF:
 				straight_x(SEGMENT_WIDTH / 2 * num, velocity, velocity);
@@ -799,16 +795,16 @@ private:
 			case TURN_LEFT_90:
 				for (int i = 0; i < num; i++) {
 					Curve90 tr(false);
-					straight_x(tr.straight, velocity, velocity);
-					trace(tr, velocity);
+					straight_x(tr.straight, velocity, tr.velocity);
+					trace(tr, tr.velocity);
 					straight_x(tr.straight, velocity, velocity);
 				}
 				break;
 			case TURN_RIGHT_90:
 				for (int i = 0; i < num; i++) {
 					Curve90 tr(true);
-					straight_x(tr.straight, velocity, velocity);
-					trace(tr, velocity);
+					straight_x(tr.straight, velocity, tr.velocity);
+					trace(tr, tr.velocity);
 					straight_x(tr.straight, velocity, velocity);
 				}
 				break;
@@ -877,8 +873,8 @@ private:
 		printf("Path: %s\n", path.c_str());
 
 #if HALF_SIZE
-		const float v_max = 1200;
-		const float curve_gain = 0.6f;
+		const float v_max = 600;
+		const float curve_gain = 0.4f;
 #else
 		const float v_max = 1200;
 		const float curve_gain = 0.5f;
@@ -917,7 +913,7 @@ private:
 				C60 tr(false);
 				straight += tr.straight2;
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
@@ -928,7 +924,7 @@ private:
 				C60 tr(true);
 				straight += tr.straight2;
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
@@ -938,7 +934,7 @@ private:
 			case FAST_TURN_LEFT_30: {
 				C30 tr(false);
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
@@ -947,7 +943,7 @@ private:
 			case FAST_TURN_RIGHT_30: {
 				C30 tr(true);
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
@@ -956,7 +952,7 @@ private:
 			case FAST_TURN_LEFT_120: {
 				C120 tr(false);
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
@@ -965,7 +961,7 @@ private:
 			case FAST_TURN_RIGHT_120: {
 				C120 tr(true);
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
@@ -1015,7 +1011,7 @@ private:
 				C150 tr(false);
 				straight += tr.straight2;
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
@@ -1026,7 +1022,7 @@ private:
 				C150 tr(true);
 				straight += tr.straight2;
 				if (straight > 1.0f) {
-					straight_x(straight, v_max, tr.velocity * curve_gain);
+					straight_x(straight, v_max, tr.velocity * curve_gain, false);
 					straight = 0;
 				}
 				trace(tr, tr.velocity * curve_gain);
