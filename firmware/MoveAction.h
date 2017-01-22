@@ -86,7 +86,7 @@ public:
 	Curve90(bool mirror = false) :
 			Trajectory(), mirror(mirror) {
 	}
-	const float velocity = 200.0f;
+	const float velocity = 240.0f;
 	const float straight = 15.0f;
 private:
 	bool mirror;
@@ -723,7 +723,7 @@ private:
 				velocity = velocity_a;
 #define LOOK_AHEAD_UNIT_ST		10
 #define TRAJECTORY_PROP_GAIN_ST	40
-			float theta = atan2f(-cur.y, 10 + LOOK_AHEAD_UNIT_ST * pow(velocity / 1200, 2)) - cur.theta;
+			float theta = atan2f(-cur.y, 10 + LOOK_AHEAD_UNIT_ST * pow(velocity / 900, 2)) - cur.theta;
 			sc->set_target(velocity, TRAJECTORY_PROP_GAIN_ST * theta);
 			if (avoid)
 				wall_avoid();
@@ -757,7 +757,7 @@ private:
 				Curve90 tr;
 				Thread::signal_wait(0x01);
 				Position cur = getRelativePosition();
-				const float decel = 3000;
+				const float decel = 6000;
 				float extra = tr.straight - cur.x;
 				float v = sqrt(2 * decel * fabs(extra));
 				if (v > velocity)
@@ -798,7 +798,7 @@ private:
 				}
 				return;
 			case GO_STRAIGHT:
-				straight_x(SEGMENT_WIDTH * num, 300, velocity);
+				straight_x(SEGMENT_WIDTH * num, 360, velocity);
 				break;
 			case GO_HALF:
 				straight_x(SEGMENT_WIDTH / 2 * num, velocity, velocity);
@@ -808,7 +808,7 @@ private:
 					Curve90 tr(false);
 					straight_x(tr.straight, velocity, tr.velocity);
 					trace(tr, tr.velocity);
-					straight_x(tr.straight, velocity, velocity);
+					straight_x(tr.straight, tr.velocity, velocity);
 				}
 				break;
 			case TURN_RIGHT_90:
@@ -816,7 +816,7 @@ private:
 					Curve90 tr(true);
 					straight_x(tr.straight, velocity, tr.velocity);
 					trace(tr, tr.velocity);
-					straight_x(tr.straight, velocity, velocity);
+					straight_x(tr.straight, tr.velocity, velocity);
 				}
 				break;
 			case RETURN:
@@ -885,7 +885,7 @@ private:
 
 #if HALF_SIZE
 		const float v_max = 2400;
-		const float curve_gain = 0.6f;
+		const float curve_gain = 0.7f;
 #else
 		const float v_max = 1200;
 		const float curve_gain = 0.5f;

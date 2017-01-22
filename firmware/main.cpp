@@ -326,14 +326,12 @@ int main() {
 					case 2:
 						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
 						for (int i = 0; i < 4; i++) {
-							ma->set_action(MoveAction::FAST_GO_STRAIGHT, 5);
-							ma->set_action(MoveAction::FAST_GO_HALF);
-							ma->set_action(MoveAction::FAST_TURN_RIGHT_180);
-							ma->set_action(MoveAction::FAST_GO_HALF);
-							ma->set_action(MoveAction::FAST_GO_STRAIGHT, 5);
-							ma->set_action(MoveAction::FAST_GO_HALF);
-							ma->set_action(MoveAction::FAST_TURN_RIGHT_180);
-							ma->set_action(MoveAction::FAST_GO_HALF);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT, 6);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_GO_STRAIGHT, 6);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
+							ma->set_action(MoveAction::FAST_TURN_RIGHT_90);
 						}
 						mpu->calibration();
 						wd->calibration();
