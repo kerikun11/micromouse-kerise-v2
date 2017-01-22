@@ -2,7 +2,7 @@ clear
 segment = 90;
 %%{
 % search 90
-pos_end = [segment/2-20, segment/2-20, pi/2];
+pos_end = [segment/2-15, segment/2-15, pi/2];
 %}
 %{
 % 30
@@ -32,7 +32,7 @@ pos_end = [0, segment, pi];
 omega_dot = 144 * pi;
 omega_max = 6 * pi;
 angle = pos_end(3);
-dx = 1;
+dx = 2;
 
 T = omega_max / omega_dot * pi;
 [t, theta] = ode45(@(t, theta) omega_max * sin(pi*t/T)^2, [0 T], 0);

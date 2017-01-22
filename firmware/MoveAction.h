@@ -15,7 +15,7 @@
 #include <string>
 
 #define WALL_ATTACH_ENABLED			false
-#define WALL_AVOID_ENABLED			false
+#define WALL_AVOID_ENABLED			true
 
 #if HALF_SIZE
 #define LOOK_AHEAD_UNIT				3
@@ -87,15 +87,15 @@ public:
 			Trajectory(), mirror(mirror) {
 	}
 	const float velocity = 200.0f;
-	const float straight = 20.0f;
+	const float straight = 15.0f;
 private:
 	bool mirror;
 	virtual int size() const {
-		return 22;
+		return 26;
 	}
 	virtual Position position(int index) const {
-		static const float data[22 + 1][3] =
-				{ { 0.0000000000, 0.0000000000, 0.0000000000 }, { 1.9999997991, 0.0006181047, 0.0012339644 }, { 3.9999728693, 0.0097791726, 0.0097058775 }, { 5.9995554509, 0.0485836092, 0.0318443870 }, { 7.9968678209, 0.1495283374, 0.0725500287 }, { 9.9862013601, 0.3526649515, 0.1346472802 }, { 11.9551325228, 0.7004568356, 0.2185687457 }, { 13.8823774910, 1.2316203735, 0.3223067850 }, { 15.7379353169, 1.9746892111, 0.4416379950 }, { 17.4864914608, 2.9426768362, 0.5705954436 }, { 19.0936777317, 4.1305966981, 0.7024742720 }, { 20.5306258844, 5.5196184093, 0.8344067267 }, { 21.7720449580, 7.0858724310, 0.9663381529 }, { 22.7977585870, 8.8011692317, 1.0966580379 }, { 23.5981111215, 10.6326800183, 1.2190895619 }, { 24.1815675481, 12.5446599188, 1.3273191357 }, { 24.5730987354, 14.5052822069, 1.4166211413 }, { 24.8094028304, 16.4908870257, 1.4843863209 }, { 24.9325972196, 18.4869120032, 1.5304135272 }, { 24.9838925910, 20.4861954519, 1.5569322142 }, { 24.9981494836, 22.4861338527, 1.5683531544 }, { 24.9996869625, 24.4861328259, 1.5707752539 }, { 25.0000000000, 25.0000000049, 1.5707963268 }, };
+		static const float data[26 + 1][3] =
+				{ { 0.0000000000, 0.0000000000, 0.0000000000 }, { 1.9999999343, 0.0003581351, 0.0007153325 }, { 3.9999907677, 0.0056854550, 0.0056557394 }, { 5.9998473365, 0.0284088519, 0.0187172793 }, { 7.9989048295, 0.0881534668, 0.0431636004 }, { 9.9950574894, 0.2101682305, 0.0813717929 }, { 11.9834416379, 0.4231979224, 0.1346472802 }, { 13.9550171391, 0.7568522412, 0.2031221621 }, { 15.8955471785, 1.2385834025, 0.2857449285 }, { 17.7855147928, 1.8905302360, 0.3803623424 }, { 19.6013550216, 2.7266811121, 0.4838871173 }, { 21.3180252310, 3.7509398130, 0.5925383310 }, { 22.9124075718, 4.9567247722, 0.7024742720 }, { 24.3648619081, 6.3301689163, 0.8124179843 }, { 25.6578492022, 7.8546872908, 0.9223616965 }, { 26.7758327680, 9.5118234214, 1.0320459270 }, { 27.7078174774, 11.2803284795, 1.1386823358 }, { 28.4522831355, 13.1357157330, 1.2382647117 }, { 29.0182522779, 15.0532748985, 1.3273191357 }, { 29.4240311767, 17.0111878431, 1.4031915235 }, { 29.6947572836, 18.9924659652, 1.4642543049 }, { 29.8593376545, 20.9855072002, 1.5100331663 }, { 29.9473142489, 22.9834898549, 1.5412439863 }, { 29.9860126781, 24.9830869308, 1.5597370888 }, { 29.9981501834, 26.9830439783, 1.5683531544 }, { 29.9999745380, 28.9830427265, 1.5707020100 }, { 30.0000000000, 30.0000000059, 1.5707963268 }, };
 		Position ret;
 		if (index < 0) {
 			ret = Position(0 + interval * index, 0, 0);
@@ -706,9 +706,9 @@ private:
 		float T = 1.5f * (v_max - v_start) / accel;
 		while (1) {
 			Position cur = getRelativePosition();
-			if (cur.x > distance - 10.0f)
+			if (cur.x > distance - 5.0f)
 				break;
-			if (v_end < 1.0f && sc->actual.trans < 1.0f)
+			if (v_end < 1.0f && cur.x > distance - 10.0f && sc->actual.trans < 1.0f)
 				break;
 			Thread::signal_wait(0x01);
 			float extra = distance - cur.x;
@@ -754,11 +754,19 @@ private:
 		const float velocity = 200;
 		while (1) {
 			while (q.empty()) {
+				Curve90 tr;
 				Thread::signal_wait(0x01);
 				Position cur = getRelativePosition();
-				float theta = atan2f(-cur.y, 10 + LOOK_AHEAD_UNIT_ST * pow(velocity / 1200, 2)) - cur.theta;
-				sc->set_target(velocity, TRAJECTORY_PROP_GAIN_ST * theta);
-				wall_avoid();
+				const float decel = 3000;
+				float extra = tr.straight - cur.x;
+				float v = sqrt(2 * decel * fabs(extra));
+				if (v > velocity)
+					v = velocity;
+				if (extra < 0)
+					v = -v;
+				float theta = atan2f(-cur.y, 10 + LOOK_AHEAD_UNIT_ST * pow(v / 1200, 2)) - cur.theta;
+				sc->set_target(v, TRAJECTORY_PROP_GAIN_ST * theta);
+//				wall_avoid();
 			}
 			struct Operation operation = q.front();
 			enum ACTION action = operation.action;
@@ -790,7 +798,7 @@ private:
 				}
 				return;
 			case GO_STRAIGHT:
-				straight_x(SEGMENT_WIDTH * num, velocity * 2, velocity);
+				straight_x(SEGMENT_WIDTH * num, 300, velocity);
 				break;
 			case GO_HALF:
 				straight_x(SEGMENT_WIDTH / 2 * num, velocity, velocity);
