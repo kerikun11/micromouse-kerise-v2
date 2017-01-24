@@ -86,7 +86,7 @@ public:
 	Curve90(bool mirror = false) :
 			Trajectory(), mirror(mirror) {
 	}
-	const float velocity = 240.0f;
+	const float velocity = 260.0f;
 	const float straight = 15.0f;
 private:
 	bool mirror;
@@ -277,8 +277,8 @@ public:
 	C180(bool mirror = false) :
 			Trajectory(), mirror(mirror) {
 	}
-//	const float velocity = 818.9712226221780f;
-	const float velocity = 600.0f;
+	const float velocity = 818.9712226221780f;
+//	const float velocity = 600.0f;
 	const float straight = 20.0f;
 private:
 	bool mirror;
@@ -540,6 +540,7 @@ public:
 		return name[action];
 	}
 	void enable(const float speed = 200) {
+		printf("Move Action Enabled\n");
 		rfl->enable();
 		sc->enable();
 		if (path.size() > 0) {
@@ -751,7 +752,7 @@ private:
 		updateOrigin(tr.getEndPosition());
 	}
 	void searchRun() {
-		const float velocity = 200;
+		const float velocity = 240;
 		while (1) {
 			while (q.empty()) {
 				Curve90 tr;
@@ -885,7 +886,7 @@ private:
 
 #if HALF_SIZE
 		const float v_max = 2400;
-		const float curve_gain = 0.7f;
+		const float curve_gain = 0.6f;
 #else
 		const float v_max = 1200;
 		const float curve_gain = 0.5f;

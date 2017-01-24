@@ -15,13 +15,14 @@ class Reflector {
 public:
 	Reflector(PinName led_sl_fr_pin, PinName led_sr_fl_pin) :
 			led_sl_fr(led_sl_fr_pin), led_sr_fl(led_sr_fl_pin), updateThread(PRIORITY_REFLECTOR_UPDATE,
-					STACK_SIZE_REFLECTOR_UPDATE) {
+			STACK_SIZE_REFLECTOR_UPDATE) {
 		led_sl_fr.period_us(IR_LED_PERIOD_US);
 		led_sr_fl.period_us(IR_LED_PERIOD_US);
 		adcInitialize();
 		buffer_pointer = IR_RECEIVER_SAMPLE_SIZE - 1;
 	}
 	void enable() {
+		disable();
 		buffer_pointer = IR_RECEIVER_SAMPLE_SIZE - 1;
 
 		samplingTicker.attach_us(this, &Reflector::samplingIsr,
@@ -30,6 +31,7 @@ public:
 		updateThread.start(this, &Reflector::updateTask);
 		updateTicker.attach_us(this, &Reflector::updateIsr,
 		IR_RECEIVER_UPDATE_PERIOD_US);
+		printf("Reflector Enabled\n");
 	}
 	void disable() {
 		updateTicker.detach();
@@ -43,7 +45,7 @@ public:
 		else
 			return sr();
 	}
-	int16_t flont(uint8_t left_or_right) {
+	int16_t front(uint8_t left_or_right) {
 		if (left_or_right == 0)
 			return fl();
 		else

@@ -130,6 +130,7 @@ public:
 		}
 	};
 	void enable() {
+		disable();
 		for (int i = 0; i < 2; i++) {
 			target.wheel[i] = 0;
 			for (int j = 0; j < 3; j++) {
@@ -139,9 +140,11 @@ public:
 			integral.wheel[i] = 0;
 			differential.wheel[i] = 0;
 		}
-//		position.reset();
+		actual_prev.trans = 0;
+		actual_prev.rot = 0;
 		ctrlTicker.attach_us(this, &SpeedController::ctrlIsr,
 		SPEED_CONTROLLER_PERIOD_US);
+		printf("Speed Controller Enabled\n");
 	}
 	void disable() {
 		ctrlTicker.detach();

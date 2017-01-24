@@ -48,10 +48,10 @@ void debug_info() {
 //		sc->getPosition().print();
 
 //		printf("%05u\t%05u\t%05u\t%05u\n", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
-//		printf("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0], wd->wall_difference().flont[0],
-//				wd->wall_difference().flont[1], wd->wall_difference().side[1]);
-//		printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().flont[0] ? "X" : ".",
-//				wd->wall().flont[1] ? "X" : ".", wd->wall().side[1] ? "X" : ".");
+//		printf("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0], wd->wall_difference().front[0],
+//				wd->wall_difference().front[1], wd->wall_difference().side[1]);
+//		printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().front[0] ? "X" : ".",
+//				wd->wall().front[1] ? "X" : ".", wd->wall().side[1] ? "X" : ".");
 
 //		const int i = 0;
 //		if (output)
@@ -158,10 +158,10 @@ void serial_ctrl() {
 		case 'p':
 			bz->play(Buzzer::SELECT);
 			printf("%05u\t%05u\t%05u\t%05u\n", rfl->sl(), rfl->fl(), rfl->fr(), rfl->sr());
-			printf("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0], wd->wall_difference().flont[0],
-					wd->wall_difference().flont[1], wd->wall_difference().side[1]);
-			printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().flont[0] ? "X" : ".",
-					wd->wall().flont[1] ? "X" : ".", wd->wall().side[1] ? "X" : ".");
+			printf("%06.3f\t%06.3f\t%06.3f\t%06.3f\n", wd->wall_difference().side[0], wd->wall_difference().front[0],
+					wd->wall_difference().front[1], wd->wall_difference().side[1]);
+			printf("%s %s %s %s\n", wd->wall().side[0] ? "X" : ".", wd->wall().front[0] ? "X" : ".",
+					wd->wall().front[1] ? "X" : ".", wd->wall().side[1] ? "X" : ".");
 			printf("Position:\t(%06.1f, %06.1f, %06.3f)\n", sc->getPosition().x, sc->getPosition().y,
 					sc->getPosition().theta);
 			break;
@@ -294,7 +294,7 @@ int main() {
 			rfl->enable();
 			while (1) {
 				Thread::wait(10);
-				if (rfl->flont(0) > 400 && rfl->flont(1) > 400) {
+				if (rfl->front(0) > 400 && rfl->front(1) > 400) {
 					bz->play(Buzzer::CONFIRM);
 					Thread::wait(200);
 					switch (mode) {
@@ -339,11 +339,24 @@ int main() {
 						break;
 					case 3:
 						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
-						ma->set_action(MoveAction::FAST_GO_STRAIGHT, 16);
+						ma->set_action(MoveAction::FAST_GO_STRAIGHT, 9);
 						ma->set_action(MoveAction::FAST_GO_HALF);
 						ma->set_action(MoveAction::FAST_TURN_RIGHT_180);
 						ma->set_action(MoveAction::FAST_GO_HALF);
-						ma->set_action(MoveAction::FAST_GO_STRAIGHT, 8);
+						ma->set_action(MoveAction::FAST_GO_STRAIGHT, 9);
+						mpu->calibration();
+						wd->calibration();
+						ma->enable();
+						break;
+					case 4:
+						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_150);
+						ma->set_action(MoveAction::FAST_TURN_LEFT_120);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_120);
+						ma->set_action(MoveAction::FAST_TURN_LEFT_120);
+						ma->set_action(MoveAction::FAST_TURN_RIGHT_150R);
+						ma->set_action(MoveAction::FAST_GO_STRAIGHT);
 						mpu->calibration();
 						wd->calibration();
 						ma->enable();

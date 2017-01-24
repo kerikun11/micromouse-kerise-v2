@@ -22,7 +22,7 @@ public:
 	}
 	void calibration() {
 		rfl->enable();
-		Thread::wait(1);
+		Thread::wait(10);
 		for (int i = 0; i < 2; i++) {
 			_wall_distance.side[i] = 0;
 		}
@@ -38,19 +38,19 @@ public:
 			_wall_ref.side[i] = _wall_distance.side[i] / WALL_SIDE_DIV;
 		}
 		for (int i = 0; i < 2; i++) {
-			_wall_distance.flont[i] = WALL_DETECTOR_FLONT_RATIO * (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
-			_wall_ref.flont[i] = _wall_distance.flont[i] / WALL_FRONT_DIV;
+			_wall_distance.front[i] = WALL_DETECTOR_FLONT_RATIO * (_wall_distance.side[0] + _wall_distance.side[1]) / 2;
+			_wall_ref.front[i] = _wall_distance.front[i] / WALL_FRONT_DIV;
 		}
-		printf("Reflector Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],
-				(int) _wall_distance.flont[0], (int) _wall_distance.flont[1], (int) _wall_distance.side[1]);
+		printf("Wall Calibration:\t%04d\t%04d\t%04d\t%04d\n", (int) _wall_distance.side[0],
+				(int) _wall_distance.front[0], (int) _wall_distance.front[1], (int) _wall_distance.side[1]);
 	}
 	struct WALL {
 		bool side[2];
-		bool flont[2];
+		bool front[2];
 	};
 	struct WALL_VALUE {
 		float side[2];
-		float flont[2];
+		float front[2];
 	};
 	struct WALL wall() {
 		return _wall;
@@ -85,12 +85,12 @@ private:
 				_wall_difference.side[i] = (_wall_distance.side[i] - value) / _wall_distance.side[i];
 			}
 			for (int i = 0; i < 2; i++) {
-				int16_t value = rfl->flont(i);
-				if (value > _wall_ref.flont[i] * 1.02)
-					_wall.flont[i] = true;
-				else if (value < _wall_ref.flont[i] * 0.98)
-					_wall.flont[i] = false;
-				_wall_difference.flont[i] = (_wall_distance.flont[i] - value) / _wall_distance.flont[i];
+				int16_t value = rfl->front(i);
+				if (value > _wall_ref.front[i] * 1.02)
+					_wall.front[i] = true;
+				else if (value < _wall_ref.front[i] * 0.98)
+					_wall.front[i] = false;
+				_wall_difference.front[i] = (_wall_distance.front[i] - value) / _wall_distance.front[i];
 			}
 		}
 	}

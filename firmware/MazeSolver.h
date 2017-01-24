@@ -136,7 +136,7 @@ private:
 			if (wd->wall().side[1]) {
 				wall |= EAST;
 			}
-			if (wd->wall().flont[0] && wd->wall().flont[1]) {
+			if (wd->wall().front[0] && wd->wall().front[1]) {
 				wall |= NORTH;
 			}
 			wall |= DONE_NORTH;
@@ -150,7 +150,7 @@ private:
 			if (wd->wall().side[1]) {
 				wall |= SOUTH;
 			}
-			if (wd->wall().flont[0] && wd->wall().flont[1]) {
+			if (wd->wall().front[0] && wd->wall().front[1]) {
 				wall |= EAST;
 			}
 			wall |= DONE_NORTH;
@@ -164,7 +164,7 @@ private:
 			if (wd->wall().side[1]) {
 				wall |= WEST;
 			}
-			if (wd->wall().flont[0] && wd->wall().flont[1]) {
+			if (wd->wall().front[0] && wd->wall().front[1]) {
 				wall |= SOUTH;
 			}
 			wall |= DONE_NORTH;
@@ -178,7 +178,7 @@ private:
 			if (wd->wall().side[1]) {
 				wall |= NORTH;
 			}
-			if (wd->wall().flont[0] && wd->wall().flont[1]) {
+			if (wd->wall().front[0] && wd->wall().front[1]) {
 				wall |= WEST;
 			}
 			wall |= DONE_NORTH;
