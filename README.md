@@ -2,7 +2,7 @@
 
 クラッシクサイズおよびハーフサイズ兼用マイクロマウス
 
-![KERISE v2](images/kerise-v2-2.jpg)
+<img src="images/kerise-v2-1.jpg" alt="KERISE v2" width="240px"/>
 
 ## 戦績
 
